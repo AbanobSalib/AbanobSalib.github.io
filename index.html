@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abanob Salib — Computer Vision & Robotics Engineer</title>
+<meta name="description" content="Abanob Salib — M.Eng Computer Vision & Robotics Engineer specializing in autonomous drone systems, visual odometry, SLAM, and embedded ML. Based in Calgary, Canada.">
+<meta property="og:title" content="Abanob Salib — Computer Vision & Robotics Engineer">
+<meta property="og:description" content="M.Eng Engineer specializing in autonomous drone perception, visual odometry, and embedded ML.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚁</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #060810;
+    --bg2: #090d1a;
+    --surface: #0d1425;
+    --surface2: #131c30;
+    --cyan: #00d4ff;
+    --cyan2: #00a8cc;
+    --amber: #f59e0b;
+    --green: #10b981;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --border: rgba(0,212,255,0.12);
+    --grid: rgba(0,212,255,0.035);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: 'DM Sans', sans-serif; font-size: 16px;
+    line-height: 1.7; overflow-x: hidden;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 60px 60px; pointer-events: none; z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 1.1rem 3rem; display: flex; justify-content: space-between; align-items: center;
+    background: rgba(6,8,16,0.88); backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--border); transition: padding 0.3s;
+  }
+  nav.scrolled { padding: 0.7rem 3rem; }
+  .nav-logo { font-family: 'Space Mono', monospace; font-size: 0.82rem; color: var(--cyan); letter-spacing: 0.12em; }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-family: 'Space Mono', monospace; font-size: 0.72rem; color: var(--muted);
+    text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px; background: var(--cyan); transition: width 0.3s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--cyan); }
+  .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+  .nav-cta {
+    font-family: 'Space Mono', monospace; font-size: 0.72rem; padding: 0.5rem 1.2rem;
+    border: 1px solid var(--cyan); color: var(--cyan); text-decoration: none;
+    letter-spacing: 0.08em; text-transform: uppercase; transition: all 0.2s;
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  }
+  .nav-cta:hover { background: var(--cyan); color: var(--bg); }
+
+  /* HAMBURGER */
+  .nav-hamburger {
+    display: none; flex-direction: column; gap: 5px; background: none;
+    border: none; cursor: pointer; padding: 4px; z-index: 110;
+  }
+  .nav-hamburger span {
+    display: block; width: 22px; height: 2px; background: var(--cyan);
+    transition: all 0.3s;
+  }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* MOBILE MENU */
+  .mobile-menu {
+    display: none; position: fixed; inset: 0; z-index: 99;
+    background: rgba(6,8,16,0.97); backdrop-filter: blur(20px);
+    flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    font-family: 'Space Mono', monospace; font-size: 1.1rem; color: var(--muted);
+    text-decoration: none; letter-spacing: 0.12em; text-transform: uppercase; transition: color 0.2s;
+  }
+  .mobile-menu a:hover { color: var(--cyan); }
+  .mobile-menu .mobile-cta {
+    margin-top: 1rem; padding: 0.8rem 2rem; border: 1px solid var(--cyan);
+    color: var(--cyan); font-size: 0.85rem;
+  }
+
+  /* HERO */
+  #hero { position: relative; min-height: 100vh; display: flex; align-items: center; padding: 0 3rem; overflow: hidden; }
+  #droneCanvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .hero-content { position: relative; z-index: 2; max-width: 850px; padding-top: 80px; }
+  .hero-tag {
+    font-family: 'Space Mono', monospace; font-size: 0.72rem; color: var(--cyan);
+    letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 1.5rem;
+    opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+    display: flex; align-items: center; gap: 0.8rem;
+  }
+  .hero-tag::before { content: ''; width: 36px; height: 1px; background: var(--cyan); }
+  h1 {
+    font-family: 'Syne', sans-serif; font-size: clamp(3.5rem, 8vw, 7.5rem);
+    font-weight: 800; line-height: 0.93; letter-spacing: -0.02em; margin-bottom: 1.5rem;
+    opacity: 0; animation: fadeUp 0.8s 0.4s forwards;
+  }
+  h1 .outline { color: transparent; -webkit-text-stroke: 1.5px rgba(0,212,255,0.45); }
+  .hero-desc {
+    font-size: 1.1rem; color: var(--muted); max-width: 530px; margin-bottom: 2.5rem; line-height: 1.8;
+    opacity: 0; animation: fadeUp 0.8s 0.6s forwards;
+  }
+  .hero-desc strong { color: var(--text); font-weight: 500; }
+  .hero-actions { display: flex; gap: 1rem; opacity: 0; animation: fadeUp 0.8s 0.8s forwards; }
+  .btn-primary {
+    padding: 0.9rem 2.2rem; background: var(--cyan); color: var(--bg);
+    font-family: 'Space Mono', monospace; font-size: 0.78rem; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: all 0.25s;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  }
+  .btn-primary:hover { background: #00b8db; transform: translateY(-2px); }
+  .btn-outline {
+    padding: 0.9rem 2.2rem; border: 1px solid var(--border); color: var(--text);
+    font-family: 'Space Mono', monospace; font-size: 0.78rem;
+    letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: all 0.25s;
+  }
+  .btn-outline:hover { border-color: var(--cyan); color: var(--cyan); }
+  .hero-stats {
+    position: absolute; right: 3rem; top: 50%; transform: translateY(-50%);
+    display: flex; flex-direction: column; gap: 2.5rem; z-index: 2;
+    opacity: 0; animation: fadeIn 1s 1s forwards;
+  }
+  .stat { text-align: right; border-right: 2px solid var(--cyan); padding-right: 1.2rem; }
+  .stat-num { font-family: 'Syne', sans-serif; font-size: 2.8rem; font-weight: 800; color: var(--cyan); line-height: 1; }
+  .stat-label { font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; }
+  .scroll-hint {
+    position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+    z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    opacity: 0; animation: fadeIn 1s 1.5s forwards;
+  }
+  .scroll-hint span { font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; }
+  .scroll-line { width: 1px; height: 42px; background: linear-gradient(to bottom, var(--cyan), transparent); animation: scrollPulse 2s infinite; }
+
+  /* SECTIONS */
+  section { position: relative; z-index: 1; padding: 7rem 3rem; }
+  .section-header { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 4rem; }
+  .section-num { font-family: 'Space Mono', monospace; font-size: 0.72rem; color: var(--cyan); letter-spacing: 0.15em; }
+  .section-title { font-family: 'Syne', sans-serif; font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 800; letter-spacing: -0.02em; }
+  .section-line { flex: 1; height: 1px; background: var(--border); max-width: 220px; }
+
+  /* ABOUT */
+  #about { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .about-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 5rem; align-items: start; }
+  .about-text p { color: var(--muted); margin-bottom: 1.1rem; font-size: 1.02rem; }
+  .about-text p strong { color: var(--text); }
+  .about-tags { display: flex; flex-wrap: wrap; gap: 0.55rem; margin-top: 1.8rem; }
+  .tag {
+    font-family: 'Space Mono', monospace; font-size: 0.67rem; padding: 0.35rem 0.85rem;
+    border: 1px solid var(--border); color: var(--cyan); letter-spacing: 0.07em; text-transform: uppercase; transition: background 0.2s;
+  }
+  .tag:hover { background: rgba(0,212,255,0.06); }
+  .about-clearance { margin-top: 2rem; padding: 1rem 1.4rem; border: 1px solid rgba(16,185,129,0.3); background: rgba(16,185,129,0.05); }
+  .clearance-label { font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--green); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.3rem; }
+  .clearance-val { font-size: 0.92rem; color: var(--text); }
+  .about-right { display: flex; flex-direction: column; gap: 1rem; }
+  .info-card { padding: 1.3rem 1.5rem; background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--cyan); transition: transform 0.2s; }
+  .info-card:hover { transform: translateX(4px); }
+  .info-card-label { font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.35rem; }
+  .info-card-value { font-size: 0.97rem; color: var(--text); font-weight: 500; }
+
+  /* SKILLS */
+  .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+  .skill-cat { padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); transition: border-color 0.3s, transform 0.3s; }
+  .skill-cat:hover { border-color: rgba(0,212,255,0.4); transform: translateY(-4px); }
+  .skill-cat-icon { font-size: 1.7rem; margin-bottom: 0.8rem; }
+  .skill-cat-title { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; margin-bottom: 1rem; color: var(--cyan); }
+  .skill-list { list-style: none; display: flex; flex-direction: column; gap: 0.35rem; }
+  .skill-list li { font-size: 0.88rem; color: var(--muted); display: flex; align-items: center; gap: 0.55rem; }
+  .skill-list li::before { content: '▸'; color: var(--cyan); font-size: 0.65rem; }
+
+  /* EXPERIENCE */
+  #experience { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .experience-timeline { position: relative; padding-left: 2.5rem; }
+  .experience-timeline::before {
+    content: ''; position: absolute; left: 0; top: 8px; bottom: 8px;
+    width: 1px; background: linear-gradient(to bottom, var(--cyan), rgba(0,212,255,0.1));
+  }
+  .exp-item {
+    position: relative; margin-bottom: 3.5rem; padding-left: 1.8rem;
+    opacity: 0; transform: translateX(-25px); transition: opacity 0.6s, transform 0.6s;
+  }
+  .exp-item.visible { opacity: 1; transform: translateX(0); }
+  .exp-item::before {
+    content: ''; position: absolute; left: -2.86rem; top: 0.5rem;
+    width: 10px; height: 10px; background: var(--bg2);
+    border: 2px solid var(--cyan); border-radius: 50%; box-shadow: 0 0 8px rgba(0,212,255,0.4);
+  }
+  .exp-item:last-child { margin-bottom: 0; }
+  .exp-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem; }
+  .exp-company { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 700; }
+  .exp-period { font-family: 'Space Mono', monospace; font-size: 0.68rem; color: var(--cyan); letter-spacing: 0.1em; padding: 0.28rem 0.65rem; border: 1px solid var(--border); }
+  .exp-role { font-size: 0.97rem; color: var(--cyan); font-weight: 500; margin-bottom: 0.7rem; }
+  .exp-desc { color: var(--muted); font-size: 0.93rem; margin-bottom: 1rem; line-height: 1.7; }
+  .exp-tags { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+  .exp-tag { font-family: 'Space Mono', monospace; font-size: 0.63rem; padding: 0.22rem 0.6rem; background: var(--surface2); color: var(--muted); letter-spacing: 0.05em; }
+
+  /* PUBLICATIONS */
+  .pub-grid { display: grid; gap: 1rem; }
+  .pub-item {
+    padding: 1.5rem 1.8rem; background: var(--surface); border: 1px solid var(--border);
+    border-left: 3px solid var(--amber);
+    transition: transform 0.25s, border-left-color 0.25s;
+    display: flex; gap: 1.5rem; align-items: flex-start;
+  }
+  .pub-item:hover { transform: translateX(5px); border-left-color: #fbbf24; }
+  .pub-num { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; color: rgba(245,158,11,0.25); line-height: 1; min-width: 2.8rem; flex-shrink: 0; }
+  .pub-content { flex: 1; }
+  .pub-title-link { text-decoration: none; }
+  .pub-title { font-size: 0.97rem; font-weight: 500; color: var(--text); margin-bottom: 0.35rem; line-height: 1.45; transition: color 0.2s; }
+  .pub-title-link:hover .pub-title { color: var(--cyan); }
+  .pub-meta { font-family: 'Space Mono', monospace; font-size: 0.67rem; color: var(--muted); letter-spacing: 0.05em; }
+  .pub-doi { font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--amber); margin-top: 0.3rem; }
+
+  /* PROJECTS */
+  .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.4rem; }
+  .project-card {
+    padding: 2rem; background: var(--surface); border: 1px solid var(--border);
+    position: relative; overflow: hidden; transition: border-color 0.3s, transform 0.3s;
+  }
+  .project-card:hover { border-color: rgba(0,212,255,0.4); transform: translateY(-5px); }
+  .project-card::before { content: ''; position: absolute; top: 0; right: 0; width: 100px; height: 100px; background: radial-gradient(circle at top right, rgba(0,212,255,0.07), transparent 70%); pointer-events: none; }
+  .project-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(to right, var(--cyan), transparent); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
+  .project-card:hover::after { transform: scaleX(1); }
+  .project-icon { font-size: 2rem; margin-bottom: 1.1rem; }
+  .project-title { font-family: 'Syne', sans-serif; font-size: 1.12rem; font-weight: 700; margin-bottom: 0.55rem; }
+  .project-desc { font-size: 0.88rem; color: var(--muted); margin-bottom: 1.2rem; line-height: 1.65; }
+  .project-stack { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .stack-pill { font-family: 'Space Mono', monospace; font-size: 0.62rem; padding: 0.2rem 0.5rem; background: rgba(0,212,255,0.07); color: var(--cyan); border: 1px solid rgba(0,212,255,0.18); }
+
+  /* CONTACT */
+  #contact { text-align: center; }
+  .contact-inner { max-width: 680px; margin: 0 auto; }
+  .contact-title { font-family: 'Syne', sans-serif; font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 1rem; }
+  .contact-sub { color: var(--muted); font-size: 1.05rem; margin-bottom: 3rem; }
+  .contact-links { display: flex; justify-content: center; gap: 1.2rem; flex-wrap: wrap; margin-bottom: 3rem; }
+  .contact-link {
+    display: flex; flex-direction: column; align-items: center; gap: 0.45rem;
+    padding: 1.4rem 1.8rem; background: var(--surface); border: 1px solid var(--border);
+    text-decoration: none; transition: all 0.25s; min-width: 130px;
+  }
+  .contact-link:hover { border-color: var(--cyan); transform: translateY(-4px); }
+  .contact-link-icon { font-size: 1.4rem; }
+  .contact-link-label { font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; }
+  .contact-link-val { font-size: 0.88rem; color: var(--text); }
+
+  /* FOOTER */
+  footer { padding: 1.8rem 3rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; }
+  .footer-copy { font-family: 'Space Mono', monospace; font-size: 0.68rem; color: var(--muted); }
+  .footer-built { font-family: 'Space Mono', monospace; font-size: 0.68rem; color: var(--muted); }
+  .footer-built span { color: var(--cyan); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes scrollPulse { 0%, 100% { opacity: 1; transform: scaleY(1); } 50% { opacity: 0.35; transform: scaleY(0.65); } }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links, .nav-cta { display: none; }
+    .nav-hamburger { display: flex; }
+    section { padding: 5rem 1.5rem; }
+    #hero { padding: 0 1.5rem; }
+    h1 { font-size: 3rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .skills-grid { grid-template-columns: 1fr 1fr; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .hero-stats { display: none; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+  @media (max-width: 600px) {
+    .skills-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" onclick="closeMobileMenu()">About</a>
+  <a href="#skills" onclick="closeMobileMenu()">Skills</a>
+  <a href="#experience" onclick="closeMobileMenu()">Experience</a>
+  <a href="#publications" onclick="closeMobileMenu()">Research</a>
+  <a href="#projects" onclick="closeMobileMenu()">Projects</a>
+  <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+  <a href="mailto:abanob.salib@alumni.ucalgary.ca" class="mobile-cta">Get In Touch</a>
+</div>
+
+<nav id="mainNav">
+  <div class="nav-logo">// ABANOB_SALIB</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#publications">Research</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="mailto:abanob.salib@alumni.ucalgary.ca" class="nav-cta">Get In Touch</a>
+  <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu" onclick="toggleMobileMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="droneCanvas"></canvas>
+  <div class="hero-content">
+    <div class="hero-tag">Computer Vision · Robotics · Autonomous Drones</div>
+    <h1>Abanob<br><span class="outline">Salib</span></h1>
+    <p class="hero-desc">
+      <strong>M.Eng Engineer</strong> specializing in autonomous drone perception, visual odometry, and embedded ML — building systems that let machines see and navigate the world.
+    </p>
+    <div class="hero-actions">
+      <a href="#experience" class="btn-primary">View Experience</a>
+      <a href="#contact" class="btn-outline">Let's Talk</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">6+</div><div class="stat-label">Publications</div></div>
+    <div class="stat"><div class="stat-num">7+</div><div class="stat-label">Yrs Experience</div></div>
+    <div class="stat"><div class="stat-num">3</div><div class="stat-label">Industries</div></div>
+  </div>
+  <div class="scroll-hint"><span>Scroll</span><div class="scroll-line"></div></div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">About Me</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>I'm a <strong>Computer Vision & ML Engineer</strong> with an M.Eng in Engineering Geomatics from the University of Calgary, with peer-reviewed publications in navigation, visual odometry, and UAV systems.</p>
+      <p>My work sits at the intersection of aerial robotics, embedded hardware, and real-time perception — building systems that let <strong>drones see, reason, and navigate autonomously</strong>, from indoor GNSS-denied environments to wide-area methane detection.</p>
+      <p>Currently at <strong>Draganfly Inc.</strong> leading a Raspberry Pi → NVIDIA Jetson migration and implementing obstacle avoidance with ROS 2 and PX4. In parallel, I consult for <strong>Aerometrix Ltd.</strong> on UAV-based methane detection.</p>
+      <div class="about-tags">
+        <span class="tag">Visual Odometry</span><span class="tag">SLAM</span>
+        <span class="tag">ROS 2</span><span class="tag">PX4</span><span class="tag">MAVLink</span>
+        <span class="tag">NVIDIA Jetson</span><span class="tag">PyTorch</span>
+        <span class="tag">Sensor Fusion</span><span class="tag">C++</span><span class="tag">Hyperspectral</span>
+      </div>
+      <div class="about-clearance">
+        <div class="clearance-label">✓ Security Clearance</div>
+        <div class="clearance-val">Canadian Controlled Goods Program — Active</div>
+      </div>
+    </div>
+    <div class="about-right">
+      <div class="info-card">
+        <div class="info-card-label">Current Position</div>
+        <div class="info-card-value">Software / Applications Engineer · Draganfly Inc.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">Consulting</div>
+        <div class="info-card-value">UAV Systems Engineer · Aerometrix Ltd.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">Education</div>
+        <div class="info-card-value">M.Eng Engineering Geomatics · University of Calgary</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">Research</div>
+        <div class="info-card-value">Peer-Reviewed Publications · IEEE · VTC · ICCSPA</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">Based In</div>
+        <div class="info-card-value">Calgary, AB · Canada 🍁</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Technical Expertise</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-cat">
+      <div class="skill-cat-icon">🎯</div>
+      <div class="skill-cat-title">Vision & Perception</div>
+      <ul class="skill-list">
+        <li>Visual Odometry (VIO)</li><li>SLAM & 3D Mapping</li>
+        <li>Obstacle Avoidance</li><li>Hyperspectral & Thermal Imaging</li>
+        <li>Object Detection & Tracking</li><li>Depth Estimation</li>
+      </ul>
+    </div>
+    <div class="skill-cat">
+      <div class="skill-cat-icon">🚁</div>
+      <div class="skill-cat-title">Drone & Robotics</div>
+      <ul class="skill-list">
+        <li>ROS 2 / ROS</li><li>PX4 Autopilot Firmware</li>
+        <li>MAVLink Protocol</li><li>UAV Payload Integration</li>
+        <li>Autonomous Navigation</li><li>Flight Controller Tuning</li>
+      </ul>
+    </div>
+    <div class="skill-cat">
+      <div class="skill-cat-icon">⚡</div>
+      <div class="skill-cat-title">Embedded & Edge</div>
+      <ul class="skill-list">
+        <li>NVIDIA Jetson (Orin / Xavier)</li><li>Raspberry Pi</li>
+        <li>CUDA / GPU Optimization</li><li>TensorRT Inference</li>
+        <li>Real-time Pipelines</li><li>Hardware-Software Co-design</li>
+      </ul>
+    </div>
+    <div class="skill-cat">
+      <div class="skill-cat-icon">🧠</div>
+      <div class="skill-cat-title">Machine Learning</div>
+      <ul class="skill-list">
+        <li>PyTorch / TensorFlow</li><li>Model Quantization & Pruning</li>
+        <li>Production ML Deployment</li><li>Deep Learning Architecture</li>
+        <li>Multi-modal Fusion Models</li><li>EKF / UKF / Kalman Filtering</li>
+      </ul>
+    </div>
+    <div class="skill-cat">
+      <div class="skill-cat-icon">💻</div>
+      <div class="skill-cat-title">Languages & Tools</div>
+      <ul class="skill-list">
+        <li>C++ (Modern 17/20)</li><li>Python</li>
+        <li>OpenCV / PCL / Eigen</li><li>Docker / CMake / Git</li>
+        <li>Linux (Ubuntu)</li><li>Claude Code & AI Dev Tooling</li>
+      </ul>
+    </div>
+    <div class="skill-cat">
+      <div class="skill-cat-icon">🌍</div>
+      <div class="skill-cat-title">Domain Knowledge</div>
+      <ul class="skill-list">
+        <li>Autonomous Vehicle Perception</li><li>UAV Remote Sensing</li>
+        <li>Defense & Controlled Goods</li><li>Environmental Monitoring</li>
+        <li>Methane / Gas Detection</li><li>Geomatics & Photogrammetry</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Experience</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="experience-timeline">
+
+    <div class="exp-item">
+      <div class="exp-header">
+        <div class="exp-company">Draganfly Inc.</div>
+        <span class="exp-period">Feb 2026 — Present</span>
+      </div>
+      <div class="exp-role">Software / Applications Engineer · Saskatoon, SK</div>
+      <div class="exp-desc">Leading migration of the drone perception compute stack from Raspberry Pi to NVIDIA Jetson Orin for enhanced real-time performance. Implementing visual odometry, obstacle avoidance, and sensor fusion systems using ROS 2 and PX4. Completed a multi-week milestone in a single day, earning direct recognition from leadership.</div>
+      <div class="exp-tags">
+        <span class="exp-tag">NVIDIA Jetson</span><span class="exp-tag">ROS 2</span><span class="exp-tag">PX4</span>
+        <span class="exp-tag">Visual Odometry</span><span class="exp-tag">Obstacle Avoidance</span><span class="exp-tag">MAVLink</span><span class="exp-tag">C++</span>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-header">
+        <div class="exp-company">Aerometrix Ltd.</div>
+        <span class="exp-period">Jan 2026 — Present</span>
+      </div>
+      <div class="exp-role">UAV Systems Engineer (Part-time Consulting) · Remote</div>
+      <div class="exp-desc">Consulting on UAV-based methane detection services. Led a successful field deployment in San Diego — diagnosing and resolving critical drone hardware, data logging, and software issues under live field conditions. Earned a salary increase and equity offer following the deployment.</div>
+      <div class="exp-tags">
+        <span class="exp-tag">UAV Systems</span><span class="exp-tag">Methane Detection</span>
+        <span class="exp-tag">Field Deployment</span><span class="exp-tag">Python</span><span class="exp-tag">Remote Sensing</span>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-header">
+        <div class="exp-company">ITRES Research Ltd.</div>
+        <span class="exp-period">2022 — Feb 2026</span>
+      </div>
+      <div class="exp-role">Software Engineer — Airborne Imaging Systems · Calgary, AB</div>
+      <div class="exp-desc">Developed software for the TABI-1800 thermal airborne detection system deployed in Canadian defense operations. Built signal processing and calibration pipelines for hyperspectral imaging; contributed to sensor firmware and data acquisition architecture.</div>
+      <div class="exp-tags">
+        <span class="exp-tag">TABI-1800</span><span class="exp-tag">Thermal Imaging</span>
+        <span class="exp-tag">Hyperspectral</span><span class="exp-tag">C++</span>
+        <span class="exp-tag">Sensor Calibration</span><span class="exp-tag">Canadian Defense</span>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-header">
+        <div class="exp-company">TDK Corporation</div>
+        <span class="exp-period">2020 — 2022</span>
+      </div>
+      <div class="exp-role">ML / Perception Engineer — Autonomous Vehicles</div>
+      <div class="exp-desc">Designed and optimized deep learning perception models for autonomous vehicle safety systems. Developed real-time scene understanding, object detection, and multi-sensor fusion pipelines for safety-critical deployment.</div>
+      <div class="exp-tags">
+        <span class="exp-tag">Autonomous Vehicles</span><span class="exp-tag">Deep Learning</span>
+        <span class="exp-tag">LiDAR</span><span class="exp-tag">PyTorch</span>
+        <span class="exp-tag">TensorRT</span><span class="exp-tag">CUDA</span>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-header">
+        <div class="exp-company">University of Calgary</div>
+        <span class="exp-period">2018 — 2020</span>
+      </div>
+      <div class="exp-role">M.Eng Research Associate — Engineering Geomatics</div>
+      <div class="exp-desc">Graduate research in computer vision and geomatics engineering under Prof. Naser El-Sheimy. Published peer-reviewed papers spanning visual odometry, UAV navigation, GNSS-denied environments, and sensor fusion. Supervised by a Canada Research Chair in Geomatics Multi-sensor Systems.</div>
+      <div class="exp-tags">
+        <span class="exp-tag">Research</span><span class="exp-tag">Visual Odometry</span>
+        <span class="exp-tag">UAV Navigation</span><span class="exp-tag">GNSS-Denied</span><span class="exp-tag">IEEE Publications</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PUBLICATIONS -->
+<section id="publications" style="background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Research & Publications</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="pub-grid">
+
+    <div class="pub-item">
+      <div class="pub-num">01</div>
+      <div class="pub-content">
+        <a href="https://ieeexplore.ieee.org/document/10411891/" target="_blank" rel="noopener" class="pub-title-link">
+          <div class="pub-title">Body-Centered Dynamically-Tuned Error-State Extended Kalman Filter for Visual Inertial Odometry in GNSS-Denied Environments</div>
+        </a>
+        <div class="pub-meta">A. Salib, M. Moussa, A. Moussa, N. El-Sheimy · IEEE Access · 2024</div>
+        <div class="pub-doi">DOI: 10.1109/ACCESS.2024.3357458</div>
+      </div>
+    </div>
+
+    <div class="pub-item">
+      <div class="pub-num">02</div>
+      <div class="pub-content">
+        <a href="https://ieeexplore.ieee.org/document/9385709/" target="_blank" rel="noopener" class="pub-title-link">
+          <div class="pub-title">Visual Heading Estimation for UAVs in Indoor Environments</div>
+        </a>
+        <div class="pub-meta">A. Salib, A. Moussa, M. Moussa, N. El-Sheimy · IEEE ICCSPA · 2021</div>
+        <div class="pub-doi">DOI: 10.1109/ICCSPA49915.2021.9385709</div>
+      </div>
+    </div>
+
+    <div class="pub-item">
+      <div class="pub-num">03</div>
+      <div class="pub-content">
+        <a href="https://ieeexplore.ieee.org/document/9251581/" target="_blank" rel="noopener" class="pub-title-link">
+          <div class="pub-title">Visual Odometry/Inertial Integration for Enhanced Land Vehicle Navigation in GNSS Denied Environment</div>
+        </a>
+        <div class="pub-meta">A. Salib, M. Moussa, A. Moussa, N. El-Sheimy · IEEE VTC Fall · 2020</div>
+        <div class="pub-doi">DOI: 10.1109/VTC2020-Fall49728.2020.9251581</div>
+      </div>
+    </div>
+
+    <div class="pub-item">
+      <div class="pub-num">04</div>
+      <div class="pub-content">
+        <a href="https://ieeexplore.ieee.org/document/9385713/" target="_blank" rel="noopener" class="pub-title-link">
+          <div class="pub-title">Mass Flow Meter and Vehicle Information DR Land Vehicles Navigation System in Indoor Environment</div>
+        </a>
+        <div class="pub-meta">M. Moussa, A. Moussa, A. Salib, N. El-Sheimy · IEEE ICCSPA · 2021</div>
+        <div class="pub-doi">DOI: 10.1109/ICCSPA49915.2021.9385713</div>
+      </div>
+    </div>
+
+  </div>
+  <p style="font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--muted);margin-top:1.5rem;text-align:center;">
+    View full publication list on <a href="https://scholar.google.com/citations?user=cKa9MJUAAAAJ" target="_blank" style="color:var(--cyan);text-decoration:none;">Google Scholar ↗</a>
+  </p>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Key Projects</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="projects-grid">
+    <div class="project-card">
+      <div class="project-icon">🚁</div>
+      <div class="project-title">Jetson Perception Migration — Draganfly</div>
+      <div class="project-desc">Migrating full drone perception and compute stack from Raspberry Pi to NVIDIA Jetson Orin. Integrates visual odometry, real-time obstacle avoidance, and flight control via PX4 + ROS 2 — completing predicted multi-week work in days.</div>
+      <div class="project-stack">
+        <span class="stack-pill">NVIDIA Jetson</span><span class="stack-pill">ROS 2</span>
+        <span class="stack-pill">PX4</span><span class="stack-pill">C++</span><span class="stack-pill">VIO</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-icon">🌡️</div>
+      <div class="project-title">TABI-1800 Airborne Detection System</div>
+      <div class="project-desc">Custom software for Canada's defense-grade thermal airborne detection system. Built C++ signal processing and calibration pipelines handling hyperspectral data captured at altitude for Canadian DND operations.</div>
+      <div class="project-stack">
+        <span class="stack-pill">C++</span><span class="stack-pill">Python</span>
+        <span class="stack-pill">Thermal</span><span class="stack-pill">Defense</span><span class="stack-pill">Signal Processing</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-icon">🛢️</div>
+      <div class="project-title">UAV Methane Detection — Aerometrix</div>
+      <div class="project-desc">End-to-end UAV platform for pipeline methane leak detection. Field deployed to San Diego — resolved critical hardware and software faults under live conditions. Integrated multi-spectral sensors with ML classification.</div>
+      <div class="project-stack">
+        <span class="stack-pill">UAV</span><span class="stack-pill">Gas Sensors</span>
+        <span class="stack-pill">Python</span><span class="stack-pill">ML</span><span class="stack-pill">Field Ops</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-icon">🚗</div>
+      <div class="project-title">VIO Navigation Research — UofC</div>
+      <div class="project-desc">Developed a body-centered EKF-based visual-inertial odometry system for GNSS-denied navigation. Results published in IEEE Access 2024. Also developed UAV heading estimation system for indoor environments — published IEEE ICCSPA.</div>
+      <div class="project-stack">
+        <span class="stack-pill">Visual Odometry</span><span class="stack-pill">EKF</span>
+        <span class="stack-pill">GNSS-Denied</span><span class="stack-pill">IEEE Published</span><span class="stack-pill">C++</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="contact-title">Let's Build<br>Something</div>
+    <p class="contact-sub">Open to exciting opportunities in drone systems, computer vision, and autonomous robotics. Always happy to connect.</p>
+    <div class="contact-links">
+      <a href="mailto:abanob.salib@alumni.ucalgary.ca" class="contact-link">
+        <span class="contact-link-icon">✉️</span>
+        <span class="contact-link-label">Email</span>
+        <span class="contact-link-val">Send a message</span>
+      </a>
+      <a href="https://www.linkedin.com/in/abanob-salib-msc-912178a7/" target="_blank" rel="noopener" class="contact-link">
+        <span class="contact-link-icon">💼</span>
+        <span class="contact-link-label">LinkedIn</span>
+        <span class="contact-link-val">Connect</span>
+      </a>
+      <a href="https://github.com/AbanobSalib" target="_blank" rel="noopener" class="contact-link">
+        <span class="contact-link-icon">⚙️</span>
+        <span class="contact-link-label">GitHub</span>
+        <span class="contact-link-val">Browse code</span>
+      </a>
+      <a href="https://scholar.google.com/citations?user=cKa9MJUAAAAJ" target="_blank" rel="noopener" class="contact-link">
+        <span class="contact-link-icon">📖</span>
+        <span class="contact-link-label">Scholar</span>
+        <span class="contact-link-val">Publications</span>
+      </a>
+    </div>
+    <a href="mailto:abanob.salib@alumni.ucalgary.ca" class="btn-primary" style="font-size:0.82rem;padding:1rem 2.5rem;">Send a Message</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-copy">© 2026 Abanob Salib. All rights reserved.</div>
+  <div class="footer-built">Built with <span>precision</span> & morning coffee ☕</div>
+</footer>
+
+<script>
+// ─── MOBILE MENU ─────────────────────────────────
+function toggleMobileMenu() {
+  const menu = document.getElementById('mobileMenu');
+  const btn = document.getElementById('hamburger');
+  menu.classList.toggle('open');
+  btn.classList.toggle('open');
+}
+function closeMobileMenu() {
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+}
+
+// ─── DRONE CANVAS ───────────────────────────────
+const canvas = document.getElementById('droneCanvas');
+const ctx = canvas.getContext('2d');
+function resize() { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; }
+resize();
+window.addEventListener('resize', resize);
+
+const particles = Array.from({ length: 90 }, () => ({
+  x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+  vx: (Math.random() - 0.5) * 0.35, vy: (Math.random() - 0.5) * 0.35,
+  size: Math.random() * 1.8 + 0.4, alpha: Math.random() * 0.45 + 0.08,
+}));
+const droneConfigs = [
+  { cx: 0.72, cy: 0.38, rx: 130, ry: 52, speed: 0.006, angle: 0.8, size: 15 },
+  { cx: 0.82, cy: 0.65, rx: 75, ry: 30, speed: 0.009, angle: 2.4, size: 10 },
+  { cx: 0.6, cy: 0.2, rx: 55, ry: 22, speed: 0.012, angle: 4.1, size: 8 },
+];
+const droneTrails = droneConfigs.map(() => []);
+
+function drawDrone(x, y, size, alpha) {
+  ctx.save(); ctx.translate(x, y); ctx.globalAlpha = alpha;
+  const glow = ctx.createRadialGradient(0, 0, 0, 0, 0, size * 1.5);
+  glow.addColorStop(0, 'rgba(0,212,255,0.15)'); glow.addColorStop(1, 'transparent');
+  ctx.fillStyle = glow; ctx.fillRect(-size*1.5, -size*1.5, size*3, size*3);
+  ctx.strokeStyle = 'rgba(0,212,255,0.9)'; ctx.lineWidth = 0.8;
+  ctx.beginPath(); ctx.arc(0, 0, size*0.35, 0, Math.PI*2); ctx.stroke();
+  [[1,1],[1,-1],[-1,1],[-1,-1]].forEach(([dx,dy]) => {
+    const ex = dx*size*0.85*0.7, ey = dy*size*0.85*0.7;
+    ctx.beginPath(); ctx.moveTo(dx*size*0.3, dy*size*0.3); ctx.lineTo(ex, ey); ctx.stroke();
+    ctx.beginPath(); ctx.arc(ex, ey, size*0.28, 0, Math.PI*2); ctx.stroke();
+  });
+  ctx.beginPath(); ctx.arc(0, 0, 1.5, 0, Math.PI*2); ctx.fillStyle='#00d4ff'; ctx.fill();
+  ctx.restore();
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const bg = ctx.createRadialGradient(canvas.width*0.72, canvas.height*0.4, 0, canvas.width*0.72, canvas.height*0.4, canvas.width*0.55);
+  bg.addColorStop(0,'rgba(0,212,255,0.035)'); bg.addColorStop(1,'transparent');
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, canvas.width, canvas.height);
+  for (const p of particles) {
+    p.x = (p.x + p.vx + canvas.width) % canvas.width;
+    p.y = (p.y + p.vy + canvas.height) % canvas.height;
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+    ctx.fillStyle = `rgba(0,212,255,${p.alpha})`; ctx.fill();
+  }
+  for (let i = 0; i < particles.length; i++) for (let j = i+1; j < particles.length; j++) {
+    const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y;
+    const d = Math.hypot(dx, dy);
+    if (d < 95) {
+      ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y);
+      ctx.strokeStyle = `rgba(0,212,255,${0.06*(1-d/95)})`; ctx.lineWidth = 0.5; ctx.stroke();
+    }
+  }
+  droneConfigs.forEach((d, idx) => {
+    d.angle += d.speed;
+    const x = d.cx * canvas.width + Math.cos(d.angle) * d.rx;
+    const y = d.cy * canvas.height + Math.sin(d.angle) * d.ry;
+    droneTrails[idx].push({ x, y });
+    if (droneTrails[idx].length > 30) droneTrails[idx].shift();
+    if (droneTrails[idx].length > 2) {
+      ctx.beginPath(); ctx.moveTo(droneTrails[idx][0].x, droneTrails[idx][0].y);
+      for (let i = 1; i < droneTrails[idx].length; i++) ctx.lineTo(droneTrails[idx][i].x, droneTrails[idx][i].y);
+      ctx.strokeStyle = 'rgba(0,212,255,0.12)'; ctx.lineWidth = 1; ctx.stroke();
+    }
+    drawDrone(x, y, d.size, 0.65);
+  });
+  requestAnimationFrame(animate);
+}
+animate();
+
+// ─── SCROLL REVEAL ───────────────────────────────
+const expItems = document.querySelectorAll('.exp-item');
+const expObs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const idx = [...expItems].indexOf(entry.target);
+      setTimeout(() => entry.target.classList.add('visible'), idx * 130);
+      expObs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+expItems.forEach(el => expObs.observe(el));
+
+// ─── NAV ACTIVE + SHRINK ─────────────────────────
+const sectionEls = document.querySelectorAll('section[id]');
+const navLinkEls = document.querySelectorAll('.nav-links a');
+const mainNav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => {
+  mainNav.classList.toggle('scrolled', window.scrollY > 60);
+  let current = '';
+  sectionEls.forEach(sec => {
+    if (window.scrollY >= sec.offsetTop - 120) current = sec.id;
+  });
+  navLinkEls.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+});
+</script>
+</body>
+</html>
