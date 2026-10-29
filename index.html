@@ -119,6 +119,13 @@ h1 em{letter-spacing:-.02em;color:var(--accent)}
 .org{display:inline-flex;align-items:center;gap:10px;padding:5px 14px 5px 5px;border:1px solid var(--line-2);border-radius:999px;font-size:14px;font-weight:500;background:color-mix(in srgb,var(--card) 70%,transparent);backdrop-filter:blur(8px);transition:transform .25s,border-color .25s}
 .org:hover{transform:translateY(-3px);border-color:var(--accent)}
 .org .lg.sm{width:30px;height:30px;border-radius:50%}
+/* Aerometrix ships only a wide wordmark: auto-width tile, fixed-height mark */
+.org:has(.wm){padding-right:5px}
+.lg.wm,.org .lg.sm.wm{width:auto;padding:0 14px}
+.lg.wm img,.lg.wm img[src]{width:auto;height:14px}
+.lg.sm.wm{padding:0 10px}.lg.sm.wm img{height:10px}
+.org .lg.sm.wm{border-radius:999px}.org .lg.sm.wm img{height:11px}
+.co{flex-wrap:wrap}
 
 /* sections */
 section{padding:120px 0;border-top:1px solid var(--line)}
@@ -256,7 +263,7 @@ footer a:hover{color:var(--ink)}
         <div><b>3</b><span>Industries</span></div>
       </div>
     </div>
-    <div class="orgs"><span class="mono">Built at</span><span class="org"><span class="lg sm" title="Draganfly Inc."><img src="logos/draganfly.png" alt="Draganfly Inc." width="128" height="128" loading="lazy"></span><span>Draganfly</span></span><span class="org"><span class="lg sm" title="Aerometrix Ltd."><img src="logos/aerometrix.png" alt="Aerometrix Ltd." width="128" height="128" loading="lazy"></span><span>Aerometrix</span></span><span class="org"><span class="lg sm" title="ITRES Research Ltd."><img src="logos/itres.png" alt="ITRES Research Ltd." width="128" height="128" loading="lazy"></span><span>ITRES</span></span><span class="org"><span class="lg sm" title="TDK Corporation"><img src="logos/tdk.png" alt="TDK Corporation" width="128" height="128" loading="lazy"></span><span>TDK</span></span><span class="org"><span class="lg sm" title="University of Calgary"><img src="logos/ucalgary.png" alt="University of Calgary" width="128" height="128" loading="lazy"></span><span>UCalgary</span></span></div>
+    <div class="orgs"><span class="mono">Built at</span><span class="org"><span class="lg sm" title="Draganfly Inc."><img src="logos/draganfly.png" alt="Draganfly Inc." width="128" height="128" loading="lazy"></span><span>Draganfly</span></span><span class="org"><span class="lg sm wm" title="Aerometrix Ltd."><img src="logos/aerometrix.png" alt="Aerometrix Ltd." width="600" height="71" loading="lazy"></span></span><span class="org"><span class="lg sm" title="ITRES Research Ltd."><img src="logos/itres.png" alt="ITRES Research Ltd." width="128" height="128" loading="lazy"></span><span>ITRES</span></span><span class="org"><span class="lg sm" title="TDK Corporation"><img src="logos/tdk.png" alt="TDK Corporation" width="128" height="128" loading="lazy"></span><span>TDK</span></span><span class="org"><span class="lg sm" title="University of Calgary"><img src="logos/ucalgary.png" alt="University of Calgary" width="128" height="128" loading="lazy"></span><span>UCalgary</span></span></div>
   </div>
 </header>
 
@@ -267,12 +274,11 @@ footer a:hover{color:var(--ink)}
     <div class="copy rv">
       <p>Computer Vision & ML Engineer with an M.Eng in Engineering Geomatics from the University of Calgary, and peer-reviewed work in navigation, visual odometry and UAV systems.</p>
       <p>My work sits where aerial robotics, embedded hardware and real-time perception meet — drones that see, reason and navigate on their own, from GNSS-denied indoor spaces to wide-area methane detection.</p>
-      <p>At Draganfly I'm leading a Raspberry Pi → NVIDIA Jetson migration and building obstacle avoidance on ROS 2 and PX4. In parallel, I consult for Aerometrix on UAV-based methane detection.</p>
+      <p>At Draganfly I'm leading a Raspberry Pi → NVIDIA Jetson migration and building obstacle avoidance on ROS 2 and PX4. Before that, I consulted for Aerometrix on UAV-based methane detection.</p>
     </div>
     <div class="rv">
       <div class="facts">
         <div><span class="mono">Current</span><b>Software / Applications Engineer · Draganfly Inc.</b></div>
-        <div><span class="mono">Consulting</span><b>UAV Systems Engineer · Aerometrix Ltd.</b></div>
         <div><span class="mono">Education</span><b>M.Eng Engineering Geomatics · University of Calgary</b></div>
         <div><span class="mono">Research</span><b>Peer-reviewed · IEEE · ION GNSS+</b></div>
         <div><span class="mono">Based in</span><b>Calgary, AB · Canada</b></div>
@@ -313,9 +319,9 @@ footer a:hover{color:var(--ink)}
         <div class="co"><span class="lg" title="Draganfly Inc."><img src="logos/draganfly.png" alt="Draganfly Inc." width="128" height="128" loading="lazy"></span><div><h3>Draganfly Inc.</h3><div class="role">Software / Applications Engineer · Saskatoon, SK</div></div></div>
         <p>Leading migration of the drone perception compute stack from Raspberry Pi to NVIDIA Jetson Orin for real-time performance. Implementing visual odometry, obstacle avoidance and sensor fusion on ROS 2 and PX4. Completed a multi-week milestone in a single day, earning direct recognition from leadership.</p>
         <div class="chips"><span class="chip">NVIDIA Jetson</span><span class="chip">ROS 2</span><span class="chip">PX4</span><span class="chip">Visual Odometry</span><span class="chip">Obstacle Avoidance</span><span class="chip">MAVLink</span><span class="chip">C++</span></div></div></article>
-      <article class="job rv"><div class="when">Jan 2026 — Present<br><span class="now">CONSULTING</span></div><div>
-        <div class="co"><span class="lg" title="Aerometrix Ltd."><img src="logos/aerometrix.png" alt="Aerometrix Ltd." width="128" height="128" loading="lazy"></span><div><h3>Aerometrix Ltd.</h3><div class="role">UAV Systems Engineer (part-time) · Remote</div></div></div>
-        <p>Consulting on UAV-based methane detection services. Led a field deployment in San Diego — diagnosing and resolving critical drone hardware, data logging and software issues under live conditions. Earned a salary increase and equity offer following the deployment.</p>
+      <article class="job rv"><div class="when">Jan 2026 — Oct 2026</div><div>
+        <div class="co"><span class="lg wm" title="Aerometrix Ltd."><img src="logos/aerometrix.png" alt="Aerometrix Ltd." width="600" height="71" loading="lazy"></span><div><h3>Aerometrix Ltd.</h3><div class="role">UAV Systems Engineer (part-time consulting) · Remote</div></div></div>
+        <p>Consulted on UAV-based methane detection services. Led a field deployment in San Diego — diagnosing and resolving critical drone hardware, data logging and software issues under live conditions. Earned a salary increase and equity offer following the deployment.</p>
         <div class="chips"><span class="chip">UAV Systems</span><span class="chip">Methane Detection</span><span class="chip">Field Deployment</span><span class="chip">Python</span><span class="chip">Remote Sensing</span></div></div></article>
       <article class="job rv"><div class="when">2022 — Feb 2026</div><div>
         <div class="co"><span class="lg" title="ITRES Research Ltd."><img src="logos/itres.png" alt="ITRES Research Ltd." width="128" height="128" loading="lazy"></span><div><h3>ITRES Research Ltd.</h3><div class="role">Software Engineer, Airborne Imaging Systems · Calgary, AB</div></div></div>
@@ -375,7 +381,7 @@ footer a:hover{color:var(--ink)}
         <h3>TABI-1800 Airborne Detection</h3>
         <p>Software for Canada's defense-grade thermal airborne detection system. C++ signal processing and calibration pipelines for hyperspectral data captured at altitude for Canadian DND operations.</p>
         <div class="chips"><span class="chip">C++</span><span class="chip">Python</span><span class="chip">Thermal</span><span class="chip">Defense</span><span class="chip">Signal Processing</span></div></article>
-      <article class="proj rv"><div class="top"><span class="pco"><span class="lg sm" title="Aerometrix Ltd."><img src="logos/aerometrix.png" alt="Aerometrix Ltd." width="128" height="128" loading="lazy"></span><span class="mono">Aerometrix · Field</span></span><span class="mono">P/03</span></div>
+      <article class="proj rv"><div class="top"><span class="pco"><span class="lg sm wm" title="Aerometrix Ltd."><img src="logos/aerometrix.png" alt="Aerometrix Ltd." width="600" height="71" loading="lazy"></span><span class="mono">Field · 2026</span></span><span class="mono">P/03</span></div>
         <h3>UAV Methane Detection</h3>
         <p>End-to-end UAV platform for pipeline methane leak detection. Field-deployed in San Diego, resolving critical hardware and software faults live. Multi-spectral sensors with ML classification.</p>
         <div class="chips"><span class="chip">UAV</span><span class="chip">Gas Sensors</span><span class="chip">Python</span><span class="chip">ML</span><span class="chip">Field Ops</span></div></article>
