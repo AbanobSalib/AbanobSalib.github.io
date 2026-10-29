@@ -107,6 +107,21 @@ h1 em{letter-spacing:-.02em;color:var(--accent)}
 @media (max-width:860px){.hero-row{grid-template-columns:1fr;gap:32px}}
 @media (max-width:420px){.stats div{padding:16px 14px}.stats b{font-size:32px}}
 
+/* company logos: white tiles, since the marks are drawn for light backgrounds */
+.lg{width:52px;height:52px;border-radius:14px;background:#fff;border:1px solid var(--line-2);display:grid;place-items:center;flex:none;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.lg img{width:74%;height:74%;object-fit:contain}
+.lg img[src*=itres],.lg img[src*=ucalgary]{width:100%;height:100%}
+.lg.ax{background:linear-gradient(135deg,#1b1f26,#2c333d);color:#fff;font-weight:700;font-size:17px;letter-spacing:-.03em}
+.lg.sm{width:32px;height:32px;border-radius:9px;box-shadow:none}
+.lg.sm.ax{font-size:11px}
+.co{display:flex;align-items:center;gap:16px;margin-bottom:16px}
+.pco{display:flex;align-items:center;gap:10px}
+.orgs{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:40px;padding-top:24px;border-top:1px solid var(--line)}
+.orgs .mono{margin-right:6px}
+.org{display:inline-flex;align-items:center;gap:10px;padding:5px 14px 5px 5px;border:1px solid var(--line-2);border-radius:999px;font-size:14px;font-weight:500;background:color-mix(in srgb,var(--card) 70%,transparent);backdrop-filter:blur(8px);transition:transform .25s,border-color .25s}
+.org:hover{transform:translateY(-3px);border-color:var(--accent)}
+.org .lg.sm{width:30px;height:30px;border-radius:50%}
+
 /* sections */
 section{padding:120px 0;border-top:1px solid var(--line)}
 .sec-head{display:grid;grid-template-columns:200px 1fr;gap:24px;margin-bottom:56px;align-items:baseline}
@@ -147,7 +162,7 @@ h2{font-size:clamp(36px,5.5vw,64px);line-height:1;letter-spacing:-.035em;font-we
 .job .when{font-family:var(--mono);font-size:13px;color:var(--ink-3);padding-top:8px}
 .job .when .now{display:inline-block;margin-top:8px;padding:2px 8px;border-radius:6px;background:var(--accent-soft);color:var(--accent);font-size:11px;letter-spacing:.06em}
 .job h3{font-size:30px;letter-spacing:-.03em;font-weight:600;line-height:1.15}
-.job .role{color:var(--ink-2);margin:4px 0 14px}
+.job .role{color:var(--ink-2);margin-top:2px}
 .job p{color:var(--ink-2);max-width:720px;margin-bottom:18px}
 @media (max-width:760px){.job{grid-template-columns:1fr;gap:8px}}
 
@@ -243,6 +258,7 @@ footer a:hover{color:var(--ink)}
         <div><b>3</b><span>Industries</span></div>
       </div>
     </div>
+    <div class="orgs"><span class="mono">Built at</span><span class="org"><span class="lg sm" title="Draganfly Inc."><img src="logos/draganfly.png" alt="Draganfly Inc." width="128" height="128" loading="lazy"></span><span>Draganfly</span></span><span class="org"><span class="lg sm ax" role="img" aria-label="Aerometrix Ltd." title="Aerometrix Ltd.">Ax</span><span>Aerometrix</span></span><span class="org"><span class="lg sm" title="ITRES Research Ltd."><img src="logos/itres.png" alt="ITRES Research Ltd." width="128" height="128" loading="lazy"></span><span>ITRES</span></span><span class="org"><span class="lg sm" title="TDK Corporation"><img src="logos/tdk.png" alt="TDK Corporation" width="128" height="128" loading="lazy"></span><span>TDK</span></span><span class="org"><span class="lg sm" title="University of Calgary"><img src="logos/ucalgary.png" alt="University of Calgary" width="128" height="128" loading="lazy"></span><span>UCalgary</span></span></div>
   </div>
 </header>
 
@@ -296,23 +312,23 @@ footer a:hover{color:var(--ink)}
     <div class="sec-head rv"><div class="mono">03 — Experience</div><h2>Where I've <em>built</em>.</h2></div>
     <div>
       <article class="job rv"><div class="when">Feb 2026 — Present<br><span class="now">CURRENT</span></div><div>
-        <h3>Draganfly Inc.</h3><div class="role">Software / Applications Engineer · Saskatoon, SK</div>
+        <div class="co"><span class="lg" title="Draganfly Inc."><img src="logos/draganfly.png" alt="Draganfly Inc." width="128" height="128" loading="lazy"></span><div><h3>Draganfly Inc.</h3><div class="role">Software / Applications Engineer · Saskatoon, SK</div></div></div>
         <p>Leading migration of the drone perception compute stack from Raspberry Pi to NVIDIA Jetson Orin for real-time performance. Implementing visual odometry, obstacle avoidance and sensor fusion on ROS 2 and PX4. Completed a multi-week milestone in a single day, earning direct recognition from leadership.</p>
         <div class="chips"><span class="chip">NVIDIA Jetson</span><span class="chip">ROS 2</span><span class="chip">PX4</span><span class="chip">Visual Odometry</span><span class="chip">Obstacle Avoidance</span><span class="chip">MAVLink</span><span class="chip">C++</span></div></div></article>
       <article class="job rv"><div class="when">Jan 2026 — Present<br><span class="now">CONSULTING</span></div><div>
-        <h3>Aerometrix Ltd.</h3><div class="role">UAV Systems Engineer (part-time) · Remote</div>
+        <div class="co"><span class="lg ax" role="img" aria-label="Aerometrix Ltd." title="Aerometrix Ltd.">Ax</span><div><h3>Aerometrix Ltd.</h3><div class="role">UAV Systems Engineer (part-time) · Remote</div></div></div>
         <p>Consulting on UAV-based methane detection services. Led a field deployment in San Diego — diagnosing and resolving critical drone hardware, data logging and software issues under live conditions. Earned a salary increase and equity offer following the deployment.</p>
         <div class="chips"><span class="chip">UAV Systems</span><span class="chip">Methane Detection</span><span class="chip">Field Deployment</span><span class="chip">Python</span><span class="chip">Remote Sensing</span></div></div></article>
       <article class="job rv"><div class="when">2022 — Feb 2026</div><div>
-        <h3>ITRES Research Ltd.</h3><div class="role">Software Engineer, Airborne Imaging Systems · Calgary, AB</div>
+        <div class="co"><span class="lg" title="ITRES Research Ltd."><img src="logos/itres.png" alt="ITRES Research Ltd." width="128" height="128" loading="lazy"></span><div><h3>ITRES Research Ltd.</h3><div class="role">Software Engineer, Airborne Imaging Systems · Calgary, AB</div></div></div>
         <p>Developed software for the TABI-1800 thermal airborne detection system used in Canadian defense operations. Built signal processing and calibration pipelines for hyperspectral imaging; contributed to sensor firmware and data acquisition architecture.</p>
         <div class="chips"><span class="chip">TABI-1800</span><span class="chip">Thermal Imaging</span><span class="chip">Hyperspectral</span><span class="chip">C++</span><span class="chip">Sensor Calibration</span><span class="chip">Canadian Defense</span></div></div></article>
       <article class="job rv"><div class="when">2020 — 2022</div><div>
-        <h3>TDK Corporation</h3><div class="role">ML / Perception Engineer, Autonomous Vehicles</div>
+        <div class="co"><span class="lg" title="TDK Corporation"><img src="logos/tdk.png" alt="TDK Corporation" width="128" height="128" loading="lazy"></span><div><h3>TDK Corporation</h3><div class="role">ML / Perception Engineer, Autonomous Vehicles</div></div></div>
         <p>Designed and optimized deep learning perception models for autonomous vehicle safety systems. Developed real-time scene understanding, object detection and multi-sensor fusion pipelines for safety-critical deployment.</p>
         <div class="chips"><span class="chip">Autonomous Vehicles</span><span class="chip">Deep Learning</span><span class="chip">LiDAR</span><span class="chip">PyTorch</span><span class="chip">TensorRT</span><span class="chip">CUDA</span></div></div></article>
       <article class="job rv"><div class="when">2018 — 2020</div><div>
-        <h3>University of Calgary</h3><div class="role">M.Eng Research Associate, Engineering Geomatics</div>
+        <div class="co"><span class="lg" title="University of Calgary"><img src="logos/ucalgary.png" alt="University of Calgary" width="128" height="128" loading="lazy"></span><div><h3>University of Calgary</h3><div class="role">M.Eng Research Associate, Engineering Geomatics</div></div></div>
         <p>Graduate research in computer vision and geomatics under Prof. Naser El-Sheimy, Canada Research Chair in Geomatics Multi-sensor Systems. Published peer-reviewed papers on visual odometry, UAV navigation, GNSS-denied environments and sensor fusion.</p>
         <div class="chips"><span class="chip">Research</span><span class="chip">Visual Odometry</span><span class="chip">UAV Navigation</span><span class="chip">GNSS-Denied</span><span class="chip">IEEE Publications</span></div></div></article>
     </div>
@@ -344,19 +360,19 @@ footer a:hover{color:var(--ink)}
   <div class="wrap">
     <div class="sec-head rv"><div class="mono">05 — Projects</div><h2>Things that <em>fly</em>.</h2></div>
     <div class="projects">
-      <article class="proj rv"><div class="top"><span class="mono">Draganfly · 2026</span><span class="mono">P/01</span></div>
+      <article class="proj rv"><div class="top"><span class="pco"><span class="lg sm" title="Draganfly Inc."><img src="logos/draganfly.png" alt="Draganfly Inc." width="128" height="128" loading="lazy"></span><span class="mono">Draganfly · 2026</span></span><span class="mono">P/01</span></div>
         <h3>Jetson Perception Migration</h3>
         <p>Moving the full drone perception and compute stack from Raspberry Pi to NVIDIA Jetson Orin — visual odometry, real-time obstacle avoidance and flight control via PX4 + ROS 2. Predicted multi-week work, done in days.</p>
         <div class="chips"><span class="chip">NVIDIA Jetson</span><span class="chip">ROS 2</span><span class="chip">PX4</span><span class="chip">C++</span><span class="chip">VIO</span></div></article>
-      <article class="proj rv"><div class="top"><span class="mono">ITRES · Defense</span><span class="mono">P/02</span></div>
+      <article class="proj rv"><div class="top"><span class="pco"><span class="lg sm" title="ITRES Research Ltd."><img src="logos/itres.png" alt="ITRES Research Ltd." width="128" height="128" loading="lazy"></span><span class="mono">ITRES · Defense</span></span><span class="mono">P/02</span></div>
         <h3>TABI-1800 Airborne Detection</h3>
         <p>Software for Canada's defense-grade thermal airborne detection system. C++ signal processing and calibration pipelines for hyperspectral data captured at altitude for Canadian DND operations.</p>
         <div class="chips"><span class="chip">C++</span><span class="chip">Python</span><span class="chip">Thermal</span><span class="chip">Defense</span><span class="chip">Signal Processing</span></div></article>
-      <article class="proj rv"><div class="top"><span class="mono">Aerometrix · Field</span><span class="mono">P/03</span></div>
+      <article class="proj rv"><div class="top"><span class="pco"><span class="lg ax sm" role="img" aria-label="Aerometrix Ltd." title="Aerometrix Ltd.">Ax</span><span class="mono">Aerometrix · Field</span></span><span class="mono">P/03</span></div>
         <h3>UAV Methane Detection</h3>
         <p>End-to-end UAV platform for pipeline methane leak detection. Field-deployed in San Diego, resolving critical hardware and software faults live. Multi-spectral sensors with ML classification.</p>
         <div class="chips"><span class="chip">UAV</span><span class="chip">Gas Sensors</span><span class="chip">Python</span><span class="chip">ML</span><span class="chip">Field Ops</span></div></article>
-      <article class="proj rv"><div class="top"><span class="mono">UCalgary · Research</span><span class="mono">P/04</span></div>
+      <article class="proj rv"><div class="top"><span class="pco"><span class="lg sm" title="University of Calgary"><img src="logos/ucalgary.png" alt="University of Calgary" width="128" height="128" loading="lazy"></span><span class="mono">UCalgary · Research</span></span><span class="mono">P/04</span></div>
         <h3>VIO Navigation Research</h3>
         <p>Body-centered EKF visual-inertial odometry for GNSS-denied navigation, published in IEEE Access 2024 — plus a UAV heading estimation system for indoor environments, published at IEEE ICCSPA.</p>
         <div class="chips"><span class="chip">Visual Odometry</span><span class="chip">EKF</span><span class="chip">GNSS-Denied</span><span class="chip">C++</span></div>
