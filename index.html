@@ -8,6 +8,15 @@
 <meta property="og:title" content="Abanob Salib — Computer Vision & Robotics Engineer">
 <meta property="og:description" content="M.Eng Engineer specializing in autonomous drone perception, visual odometry, and embedded ML.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://abanobsalib.github.io/">
+<meta property="og:image" content="https://abanobsalib.github.io/og.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://abanobsalib.github.io/">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0a0b0d" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f6f5f1" media="(prefers-color-scheme: light)">
+<script>document.documentElement.classList.add('js');try{const t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 <meta name="google-site-verification" content="-D0tAli9SxZw8QeSbuSkSOwq2ELqu2ZY0WiGx79VsH8" />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='44' fill='none' stroke='%23c8ff3d' stroke-width='8'/><circle cx='50' cy='50' r='12' fill='%23c8ff3d'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,18 +25,27 @@
 <style>
 :root{
   --bg:#0a0b0d; --bg-2:#111317; --card:#14171c; --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.14);
-  --ink:#eef0f3; --ink-2:#a3a9b3; --ink-3:#6b717c;
+  --ink:#eef0f3; --ink-2:#a3a9b3; --ink-3:#858b96;
   --accent:#c8ff3d; --accent-ink:#0a0b0d; --accent-soft:rgba(200,255,61,.12);
   --sans:"Inter Tight",system-ui,sans-serif; --serif:"Instrument Serif",Georgia,serif; --mono:"JetBrains Mono",ui-monospace,monospace;
-  --r:18px; --max:1180px;
+  --r:18px; --max:1180px; color-scheme:dark;
+}
+/* light theme: chosen via toggle, or by OS when no choice saved */
+:root[data-theme=light]{
+  --bg:#f6f5f1; --bg-2:#efede7; --card:#ffffff; --line:rgba(10,12,16,.08); --line-2:rgba(10,12,16,.16);
+  --ink:#0e1013; --ink-2:#4a505a; --ink-3:#61666f;
+  --accent:#3d5afe; --accent-ink:#fff; --accent-soft:rgba(61,90,254,.1); color-scheme:light;
 }
 @media (prefers-color-scheme: light){
-  :root{
+  :root:not([data-theme=dark]){
     --bg:#f6f5f1; --bg-2:#efede7; --card:#ffffff; --line:rgba(10,12,16,.08); --line-2:rgba(10,12,16,.16);
-    --ink:#0e1013; --ink-2:#4a505a; --ink-3:#848a94;
-    --accent:#3d5afe; --accent-ink:#fff; --accent-soft:rgba(61,90,254,.1);
+    --ink:#0e1013; --ink-2:#4a505a; --ink-3:#61666f;
+    --accent:#3d5afe; --accent-ink:#fff; --accent-soft:rgba(61,90,254,.1); color-scheme:light;
   }
 }
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+.skip{position:fixed;left:16px;top:-60px;z-index:100;padding:10px 16px;border-radius:10px;background:var(--accent);color:var(--accent-ink);font-weight:600;transition:top .2s}
+.skip:focus{top:16px}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
@@ -39,14 +57,21 @@ em,.serif{font-family:var(--serif);font-style:italic;font-weight:400}
 
 /* nav */
 nav{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:50;display:flex;align-items:center;gap:4px;
-  padding:6px;border:1px solid var(--line-2);border-radius:999px;background:color-mix(in srgb,var(--bg) 70%,transparent);
+  width:max-content;padding:6px;border:1px solid var(--line-2);border-radius:999px;background:color-mix(in srgb,var(--bg) 70%,transparent);
   backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);max-width:calc(100% - 32px)}
 nav .logo{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--ink);color:var(--bg);font-weight:700;font-size:13px;letter-spacing:-.02em;flex:none}
 nav .links{display:flex;gap:2px}
 nav .links a{padding:8px 14px;border-radius:999px;font-size:14px;color:var(--ink-2);transition:.2s}
 nav .links a:hover,nav .links a.on{color:var(--ink);background:var(--line)}
 nav .cta{padding:8px 16px;border-radius:999px;background:var(--accent);color:var(--accent-ink);font-size:14px;font-weight:600;flex:none}
-@media (max-width:760px){nav .links{display:none}}
+nav .ib{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;border:1px solid var(--line-2);background:none;color:var(--ink);cursor:pointer;flex:none}
+nav .ib:hover{background:var(--line)}
+nav .menu{display:none}
+nav::after{content:"";position:absolute;left:24px;right:24px;bottom:-1px;height:1px;background:var(--accent);transform-origin:left;transform:scaleX(var(--p,0))}
+#mnav{inset:72px 16px auto;margin:0 auto;width:auto;max-width:420px;padding:8px;border:1px solid var(--line-2);border-radius:var(--r);background:var(--card);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+#mnav a{display:block;padding:12px 16px;border-radius:12px;font-size:17px}
+#mnav a:hover{background:var(--line)}
+@media (max-width:760px){nav .links{display:none}nav .menu{display:grid}}
 
 /* hero */
 .hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;padding:140px 0 72px;overflow:hidden}
@@ -73,6 +98,12 @@ h1 em{letter-spacing:-.02em;color:var(--accent)}
 .btn:hover{transform:translateY(-2px)}
 .btn .arr{transition:transform .2s}.btn:hover .arr{transform:translateX(3px)}
 .hero-row>*{min-width:0}
+.hud{position:absolute;top:96px;right:24px;z-index:2;padding:12px 16px;display:grid;gap:4px;font-size:11px;line-height:1.5;
+  background:linear-gradient(var(--line-2),var(--line-2)) top left/10px 1px,linear-gradient(var(--line-2),var(--line-2)) top left/1px 10px,
+  linear-gradient(var(--line-2),var(--line-2)) bottom right/10px 1px,linear-gradient(var(--line-2),var(--line-2)) bottom right/1px 10px;background-repeat:no-repeat}
+.hud b{color:var(--ink);font-weight:500}
+.hud .rec{color:var(--accent)}
+@media (max-width:760px){.hud{display:none}}
 @media (max-width:860px){.hero-row{grid-template-columns:1fr;gap:32px}}
 @media (max-width:420px){.stats div{padding:16px 14px}.stats b{font-size:32px}}
 
@@ -92,12 +123,16 @@ h2{font-size:clamp(36px,5.5vw,64px);line-height:1;letter-spacing:-.035em;font-we
 .facts b{font-weight:500;font-size:15px}
 .clear{display:flex;gap:12px;align-items:center;margin-top:16px;padding:14px 18px;border-radius:14px;background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent);font-size:14px}
 .clear svg{flex:none;color:var(--accent)}
-@media (max-width:960px){.about{grid-template-columns:1fr}.about>.mono{display:none}}
+@media (max-width:960px){.about{grid-template-columns:1fr}}
 
 /* skills bento */
 .bento{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
 .tile{grid-column:span 2;padding:28px;border:1px solid var(--line);border-radius:var(--r);background:var(--card);position:relative;overflow:hidden;transition:border-color .3s,transform .3s}
 .tile:hover{border-color:var(--line-2);transform:translateY(-3px)}
+.tile>*{position:relative}
+/* cursor spotlight, shared with .proj */
+.tile::before,.proj::before{content:"";position:absolute;width:360px;height:360px;left:var(--mx,85%);top:var(--my,0);transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,var(--accent-soft),transparent 70%);opacity:0;transition:opacity .4s;pointer-events:none}
+.tile:hover::before,.proj:hover::before{opacity:1}
 .tile.wide{grid-column:span 3}
 .tile h3{font-size:22px;letter-spacing:-.02em;font-weight:600;margin:16px 0 14px}
 .tile .ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent)}
@@ -118,16 +153,17 @@ h2{font-size:clamp(36px,5.5vw,64px);line-height:1;letter-spacing:-.035em;font-we
 
 /* publications */
 .pubs{border-top:1px solid var(--line)}
-.pub{display:grid;grid-template-columns:200px 1fr 40px;gap:24px;padding:28px 0;border-bottom:1px solid var(--line);align-items:start;transition:padding .3s}
-.pub .n{font-family:var(--serif);font-size:44px;line-height:1;color:var(--ink-3);transition:color .3s}
+.pub{display:grid;grid-template-columns:200px 1fr 40px;gap:24px;padding:28px 0;border-bottom:1px solid var(--line);align-items:start}
+.pub>div{transition:transform .3s}
+.pub .n{font-family:var(--serif);font-size:44px;line-height:1;color:var(--ink-3);transition:color .3s,transform .3s}
 .pub h3{font-size:21px;font-weight:500;letter-spacing:-.015em;line-height:1.35;margin-bottom:8px}
 .pub .meta{font-size:14px;color:var(--ink-2)}
 .pub .meta b{color:var(--ink);font-weight:500}
 .pub .doi{font-family:var(--mono);font-size:12px;color:var(--ink-3);margin-top:6px;word-break:break-all}
 .pub .go{width:40px;height:40px;border-radius:50%;border:1px solid var(--line-2);display:grid;place-items:center;transition:.3s}
-.pub:hover{padding-left:12px}
-.pub:hover .n{color:var(--accent)}
-.pub:hover .go{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);transform:rotate(-45deg)}
+.pub:is(:hover,:focus-visible)>div{transform:translateX(12px)}
+.pub:is(:hover,:focus-visible) .n{color:var(--accent)}
+.pub:is(:hover,:focus-visible) .go{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);transform:rotate(-45deg)}
 .scholar{margin-top:28px;color:var(--ink-2)}
 .scholar a{color:var(--ink);border-bottom:1px solid var(--accent)}
 @media (max-width:760px){.pub{grid-template-columns:1fr 40px}.pub .n{grid-column:1/-1;font-size:32px}}
@@ -135,8 +171,9 @@ h2{font-size:clamp(36px,5.5vw,64px);line-height:1;letter-spacing:-.035em;font-we
 /* projects */
 .projects{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
 .proj{padding:32px;border:1px solid var(--line);border-radius:22px;background:var(--card);display:flex;flex-direction:column;min-height:360px;position:relative;overflow:hidden;transition:border-color .3s}
-.proj::before{content:"";position:absolute;width:320px;height:320px;right:-120px;top:-120px;border-radius:50%;background:radial-gradient(circle,var(--accent-soft),transparent 70%);opacity:0;transition:opacity .4s}
-.proj:hover{border-color:var(--line-2)}.proj:hover::before{opacity:1}
+.proj>*{position:relative}
+.proj:hover{border-color:var(--line-2)}
+.proj .more{margin-top:18px;font-size:14px;font-weight:500;color:var(--ink);border-bottom:1px solid var(--accent);align-self:flex-start}
 .proj .top{display:flex;justify-content:space-between;align-items:center}
 .proj h3{font-size:28px;letter-spacing:-.03em;font-weight:600;line-height:1.15;margin:auto 0 12px;padding-top:48px}
 .proj p{color:var(--ink-2);margin-bottom:20px}
@@ -149,30 +186,46 @@ h2{font-size:clamp(36px,5.5vw,64px);line-height:1;letter-spacing:-.035em;font-we
 .contact p{color:var(--ink-2);max-width:520px;margin:28px auto 40px;font-size:19px}
 .links4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:880px;margin:56px auto 0;text-align:left}
 .links4 a{padding:20px;border:1px solid var(--line);border-radius:16px;background:var(--card);transition:.25s;display:grid;gap:4px}
-.links4 a:hover{border-color:var(--accent);transform:translateY(-3px)}
-.links4 b{font-weight:500;font-size:15px;overflow:hidden;text-overflow:ellipsis}
-@media (max-width:760px){.links4{grid-template-columns:1fr 1fr}}
+.links4 a:is(:hover,:focus-visible){border-color:var(--accent);transform:translateY(-3px)}
+.links4 b{font-weight:500;font-size:15px;overflow-wrap:anywhere}
+@media (max-width:760px){.links4{grid-template-columns:1fr 1fr}.links4 a:first-child{grid-column:1/-1}}
 footer{border-top:1px solid var(--line);padding:28px 0;font-size:13px;color:var(--ink-3)}
 footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+footer a:hover{color:var(--ink)}
 
-/* reveal */
-.rv{opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
-.rv.in{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}.rv{opacity:1;transform:none}}
+/* reveal (only when JS runs, so content never stays hidden) */
+.js .rv{opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+.js .rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}.js .rv{opacity:1;transform:none}}
 </style>
 </head>
 <body>
 
+<a class="skip" href="#about">Skip to content</a>
 <nav aria-label="Main">
   <a href="#top" class="logo" aria-label="Home">AS</a>
   <div class="links">
     <a href="#about">About</a><a href="#skills">Skills</a><a href="#experience">Experience</a><a href="#research">Research</a><a href="#projects">Projects</a>
   </div>
+  <button class="ib" id="theme" type="button" aria-label="Toggle light/dark theme">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18Z" fill="currentColor"/></svg>
+  </button>
+  <button class="ib menu" type="button" popovertarget="mnav" aria-label="Open menu">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+  </button>
   <a href="#contact" class="cta">Get in touch</a>
 </nav>
+<div id="mnav" popover>
+  <a href="#about">About</a><a href="#skills">Skills</a><a href="#experience">Experience</a><a href="#research">Research</a><a href="#projects">Projects</a><a href="#contact">Contact</a>
+</div>
 
 <header class="hero" id="top">
   <canvas id="flow" aria-hidden="true"></canvas>
+  <div class="hud mono" aria-hidden="true">
+    <span class="rec">● VO FRONT-END</span>
+    <span>TRK <b id="trk">0</b> · FPS <b id="fps">60</b></span>
+    <span>EGO <b id="ego">+0.00, +0.00</b></span>
+  </div>
   <div class="wrap">
     <span class="badge"><i></i>Computer Vision · Robotics · Autonomous Drones</span>
     <h1>Abanob<br><em>Salib</em></h1>
@@ -186,7 +239,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       </div>
       <div class="stats">
         <div><b>6+</b><span>Publications</span></div>
-        <div><b>7+</b><span>Years experience</span></div>
+        <div><b>7+</b><span>Years exp.</span></div>
         <div><b>3</b><span>Industries</span></div>
       </div>
     </div>
@@ -211,7 +264,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
         <div><span class="mono">Based in</span><b>Calgary, AB · Canada</b></div>
       </div>
       <div class="clear">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 5v6c0 5 3.4 9.3 8 11 4.6-1.7 8-6 8-11V5l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.3 8 11 4.6-1.7 8-6 8-11V5l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg>
         <span><b>Security clearance</b> — Canadian Controlled Goods Program, active</span>
       </div>
     </div>
@@ -222,17 +275,17 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   <div class="wrap">
     <div class="sec-head rv"><div class="mono">02 — Expertise</div><h2>The full stack of <em>autonomy</em>.</h2></div>
     <div class="bento">
-      <div class="tile wide rv"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/></svg></div><h3>Vision & Perception</h3>
+      <div class="tile wide rv"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/></svg></div><h3>Vision & Perception</h3>
         <div class="chips"><span class="chip">Visual Odometry (VIO)</span><span class="chip">SLAM & 3D Mapping</span><span class="chip">Obstacle Avoidance</span><span class="chip">Hyperspectral & Thermal</span><span class="chip">Detection & Tracking</span><span class="chip">Depth Estimation</span></div></div>
-      <div class="tile wide rv"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="5" cy="5" r="3"/><circle cx="19" cy="5" r="3"/><circle cx="5" cy="19" r="3"/><circle cx="19" cy="19" r="3"/><rect x="9" y="9" width="6" height="6" rx="1"/><path d="m7 7 2 2m8-2-2 2m-8 8 2-2m8 2-2-2"/></svg></div><h3>Drones & Robotics</h3>
+      <div class="tile wide rv"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="5" cy="5" r="3"/><circle cx="19" cy="5" r="3"/><circle cx="5" cy="19" r="3"/><circle cx="19" cy="19" r="3"/><rect x="9" y="9" width="6" height="6" rx="1"/><path d="m7 7 2 2m8-2-2 2m-8 8 2-2m8 2-2-2"/></svg></div><h3>Drones & Robotics</h3>
         <div class="chips"><span class="chip">ROS 2 / ROS</span><span class="chip">PX4 Autopilot</span><span class="chip">MAVLink</span><span class="chip">Payload Integration</span><span class="chip">Autonomous Navigation</span><span class="chip">Flight Controller Tuning</span></div></div>
-      <div class="tile rv"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="5" width="14" height="14" rx="2"/><path d="M9 1v4m6-4v4M9 19v4m6-4v4M1 9h4m-4 6h4m14-6h4m-4 6h4"/></svg></div><h3>Embedded & Edge</h3>
+      <div class="tile rv"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/><path d="M9 1v4m6-4v4M9 19v4m6-4v4M1 9h4m-4 6h4m14-6h4m-4 6h4"/></svg></div><h3>Embedded & Edge</h3>
         <div class="chips"><span class="chip">Jetson Orin / Xavier</span><span class="chip">Raspberry Pi</span><span class="chip">CUDA</span><span class="chip">TensorRT</span><span class="chip">Real-time Pipelines</span><span class="chip">HW/SW Co-design</span></div></div>
-      <div class="tile rv"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="9"/></svg></div><h3>Machine Learning</h3>
+      <div class="tile rv"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="9"/></svg></div><h3>Machine Learning</h3>
         <div class="chips"><span class="chip">PyTorch / TensorFlow</span><span class="chip">Quantization & Pruning</span><span class="chip">Production Deployment</span><span class="chip">Multi-modal Fusion</span><span class="chip">EKF / UKF / Kalman</span></div></div>
-      <div class="tile rv"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m8 6-6 6 6 6m8-12 6 6-6 6"/></svg></div><h3>Languages & Tools</h3>
+      <div class="tile rv"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m8 6-6 6 6 6m8-12 6 6-6 6"/></svg></div><h3>Languages & Tools</h3>
         <div class="chips"><span class="chip">C++ 17/20</span><span class="chip">Python</span><span class="chip">OpenCV / PCL / Eigen</span><span class="chip">Docker / CMake / Git</span><span class="chip">Linux</span><span class="chip">Claude Code</span></div></div>
-      <div class="tile wide rv" style="grid-column:span 6"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></div><h3>Domain Knowledge</h3>
+      <div class="tile wide rv" style="grid-column:span 6"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></div><h3>Domain Knowledge</h3>
         <div class="chips"><span class="chip">Autonomous Vehicle Perception</span><span class="chip">UAV Remote Sensing</span><span class="chip">Defense & Controlled Goods</span><span class="chip">Environmental Monitoring</span><span class="chip">Methane / Gas Detection</span><span class="chip">Geomatics & Photogrammetry</span></div></div>
     </div>
   </div>
@@ -306,7 +359,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       <article class="proj rv"><div class="top"><span class="mono">UCalgary · Research</span><span class="mono">P/04</span></div>
         <h3>VIO Navigation Research</h3>
         <p>Body-centered EKF visual-inertial odometry for GNSS-denied navigation, published in IEEE Access 2024 — plus a UAV heading estimation system for indoor environments, published at IEEE ICCSPA.</p>
-        <div class="chips"><span class="chip">Visual Odometry</span><span class="chip">EKF</span><span class="chip">GNSS-Denied</span><span class="chip">C++</span></div></article>
+        <div class="chips"><span class="chip">Visual Odometry</span><span class="chip">EKF</span><span class="chip">GNSS-Denied</span><span class="chip">C++</span></div>
+        <a class="more" href="https://ieeexplore.ieee.org/document/10411891/" target="_blank" rel="noopener">Read the paper ↗</a></article>
     </div>
   </div>
 </section>
@@ -316,9 +370,9 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <div class="mono rv" style="margin-bottom:24px">06 — Contact</div>
     <h2 class="rv">Let's build<br><em>something.</em></h2>
     <p class="rv">Open to opportunities in drone systems, computer vision and autonomous robotics. Always happy to connect.</p>
-    <a href="https://www.linkedin.com/in/abanob-salib-msc-912178a7/" target="_blank" rel="noopener" class="btn primary rv">Send a message <span class="arr">→</span></a>
+    <a href="https://www.linkedin.com/in/abanob-salib-msc-912178a7/" target="_blank" rel="noopener" class="btn primary rv">Message me on LinkedIn <span class="arr" aria-hidden="true">↗</span></a>
     <div class="links4">
-      <a class="rv" id="email" href="mailto:abanob.salib@alumni.ucalgary.ca"><span class="mono">Email · click to copy</span><b>abanob.salib@alumni.ucalgary.ca</b></a>
+      <a class="rv" id="email" href="mailto:abanob.salib@alumni.ucalgary.ca"><span class="mono">Email · click to copy</span><b aria-live="polite">abanob.salib@alumni.ucalgary.ca</b></a>
       <a class="rv" href="https://www.linkedin.com/in/abanob-salib-msc-912178a7/" target="_blank" rel="noopener"><span class="mono">LinkedIn</span><b>Connect ↗</b></a>
       <a class="rv" href="https://github.com/AbanobSalib" target="_blank" rel="noopener"><span class="mono">GitHub</span><b>Browse code ↗</b></a>
       <a class="rv" href="https://scholar.google.com/citations?user=cKa9MJUAAAAJ" target="_blank" rel="noopener"><span class="mono">Scholar</span><b>Publications ↗</b></a>
@@ -327,45 +381,88 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 </section>
 </main>
 
-<footer><div class="wrap"><span>© 2026 Abanob Salib</span><span>Calgary, Canada · 51.04°N 114.07°W</span></div></footer>
+<footer><div class="wrap">
+  <span>© 2026 Abanob Salib</span>
+  <span class="mono">Calgary <b id="clock" style="color:var(--ink);font-weight:500">--:--</b> MT · 51.04°N 114.07°W</span>
+  <a href="#top">Back to top ↑</a>
+</div></footer>
 
 <script>
+const root = document.documentElement;
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 // Reveal on scroll
 const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 });
 document.querySelectorAll('.rv').forEach(el => io.observe(el));
 
 // Email card copies the address instead of opening a mail client
-document.getElementById('email').addEventListener('click', function (e) {
+const email = document.getElementById('email');
+email.addEventListener('click', function (e) {
   if (!navigator.clipboard) return;
   e.preventDefault();
-  const b = this.querySelector('b'), v = b.textContent;
-  navigator.clipboard.writeText(v).then(() => { b.textContent = 'Copied!'; setTimeout(() => b.textContent = v, 2000); });
+  const b = this.querySelector('b'), v = this.href.replace('mailto:', '');
+  navigator.clipboard.writeText(v)
+    .then(() => { b.textContent = 'Copied!'; clearTimeout(this.t); this.t = setTimeout(() => b.textContent = v, 2000); })
+    .catch(() => location.href = this.href);
 });
 
-// Active nav link
+// Active nav link (cleared while the hero is in view)
 const links = [...document.querySelectorAll('nav .links a')];
 const spy = new IntersectionObserver(es => es.forEach(e => {
   if (e.isIntersecting) links.forEach(a => a.classList.toggle('on', a.hash === '#' + e.target.id));
 }), { rootMargin: '-45% 0px -50% 0px' });
-document.querySelectorAll('section[id]').forEach(s => spy.observe(s));
+document.querySelectorAll('section[id], #top').forEach(s => spy.observe(s));
+
+// Mobile menu closes after picking a section
+const mnav = document.getElementById('mnav');
+mnav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mnav.hidePopover?.()));
+
+// Theme toggle, remembered per visitor
+document.getElementById('theme').addEventListener('click', () => {
+  const light = getComputedStyle(root).colorScheme === 'light';
+  root.dataset.theme = light ? 'dark' : 'light';
+  try { localStorage.setItem('theme', root.dataset.theme); } catch (e) {}
+  readColors();
+});
+
+// Scroll progress on the nav pill
+const nav = document.querySelector('nav');
+addEventListener('scroll', () => nav.style.setProperty('--p', scrollY / Math.max(1, root.scrollHeight - innerHeight)), { passive: true });
+
+// Cursor spotlight on cards
+if (matchMedia('(hover: hover)').matches) document.querySelectorAll('.proj,.tile').forEach(el => el.addEventListener('pointermove', e => {
+  const r = el.getBoundingClientRect();
+  el.style.setProperty('--mx', e.clientX - r.left + 'px'); el.style.setProperty('--my', e.clientY - r.top + 'px');
+}));
+
+// Calgary local time in the footer
+const clock = document.getElementById('clock');
+const fmt = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Edmonton', hour: '2-digit', minute: '2-digit', hour12: false });
+const tick = () => clock.textContent = fmt.format(new Date());
+tick(); setInterval(tick, 30000);
 
 // Hero: feature-tracking field, like a VO front-end drawing optical-flow tracks
+let colA, colK;
+function readColors() { const s = getComputedStyle(root); colA = s.getPropertyValue('--accent').trim(); colK = s.getPropertyValue('--ink-3').trim(); }
+readColors();
+matchMedia('(prefers-color-scheme: light)').addEventListener('change', readColors);
 (() => {
   const c = document.getElementById('flow'), x = c.getContext('2d');
-  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let W, H, pts = [], mx = .5, my = .5;
-  const accent = () => getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
-  const ink = () => getComputedStyle(document.documentElement).getPropertyValue('--ink-3').trim();
+  const hud = { trk: document.getElementById('trk'), fps: document.getElementById('fps'), ego: document.getElementById('ego') };
+  let W, H, d, pts = [], mx = .5, my = .5, lastW = 0, running = false, frames = 0, t0 = performance.now();
   function size() {
-    const d = devicePixelRatio || 1;
+    d = devicePixelRatio || 1;
     W = c.width = c.offsetWidth * d; H = c.height = c.offsetHeight * d;
-    pts = Array.from({ length: Math.min(160, (W * H) / (14000 * d * d)) | 0 }, () => ({
-      x: Math.random() * W, y: Math.random() * H, z: .3 + Math.random() * .7, trail: [], hot: Math.random() < .08
-    }));
+    if (c.offsetWidth !== lastW) { // ponytail: only reseed on width change, so mobile URL-bar resizes don't jump
+      lastW = c.offsetWidth;
+      pts = Array.from({ length: Math.min(160, (W * H) / (14000 * d * d)) | 0 }, () => ({
+        x: Math.random() * W, y: Math.random() * H, z: .3 + Math.random() * .7, trail: [], hot: Math.random() < .08
+      }));
+    }
+    if (reduce) for (let i = 0; i < 20; i++) draw();
   }
-  function frame() {
+  function draw() {
     x.clearRect(0, 0, W, H);
-    const a = accent(), k = ink(), d = devicePixelRatio || 1;
     // camera "ego-motion": expansion from a focus point that follows the cursor
     const fx = W * (.35 + mx * .3), fy = H * (.35 + my * .3);
     for (const p of pts) {
@@ -375,19 +472,32 @@ document.querySelectorAll('section[id]').forEach(s => spy.observe(s));
       if (p.x < 0 || p.x > W || p.y < 0 || p.y > H) {
         p.x = fx + (Math.random() - .5) * W * .3; p.y = fy + (Math.random() - .5) * H * .3; p.trail = [];
       }
-      x.strokeStyle = p.hot ? a : k; x.globalAlpha = p.hot ? .9 : .45; x.lineWidth = d;
+      x.strokeStyle = p.hot ? colA : colK; x.globalAlpha = p.hot ? .9 : .45; x.lineWidth = d;
       x.beginPath(); p.trail.forEach(([u, v], i) => i ? x.lineTo(u, v) : x.moveTo(u, v)); x.stroke();
       const s = (p.hot ? 5 : 2.5) * d * p.z;
-      x.globalAlpha = p.hot ? 1 : .7; x.fillStyle = p.hot ? a : k;
-      if (p.hot) { x.strokeRect(p.x - s * 1.6, p.y - s * 1.6, s * 3.2, s * 3.2); }
+      x.globalAlpha = p.hot ? 1 : .7; x.fillStyle = p.hot ? colA : colK;
+      if (p.hot) x.strokeRect(p.x - s * 1.6, p.y - s * 1.6, s * 3.2, s * 3.2);
       x.fillRect(p.x - s / 2, p.y - s / 2, s, s);
     }
     x.globalAlpha = 1;
-    if (!still) requestAnimationFrame(frame);
   }
-  addEventListener('resize', size);
+  function loop(now) {
+    if (!running) return;
+    draw(); frames++;
+    if (now - t0 > 500) { // HUD shows real numbers from the animation
+      hud.fps.textContent = Math.round(frames * 1000 / (now - t0)); frames = 0; t0 = now;
+      hud.trk.textContent = pts.filter(p => p.trail.length > 3).length;
+      const f = n => (n >= 0 ? '+' : '') + n.toFixed(2);
+      hud.ego.textContent = f(mx - .5) + ', ' + f(.5 - my);
+    }
+    requestAnimationFrame(loop);
+  }
+  let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(size, 150); });
   addEventListener('pointermove', e => { mx = e.clientX / innerWidth; my = e.clientY / innerHeight; });
-  size(); if (still) for (let i = 0; i < 20; i++) frame(); else frame();
+  size();
+  if (reduce) { hud.trk.textContent = pts.length; return; }
+  // only animate while the hero is on screen
+  new IntersectionObserver(([e]) => { const was = running; running = e.isIntersecting; if (running && !was) requestAnimationFrame(loop); }).observe(c);
 })();
 </script>
 </body>
