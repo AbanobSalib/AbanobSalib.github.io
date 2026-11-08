@@ -119,12 +119,6 @@ h1 em{letter-spacing:-.02em;color:var(--accent)}
 .org{display:inline-flex;align-items:center;gap:10px;padding:5px 14px 5px 5px;border:1px solid var(--line-2);border-radius:999px;font-size:14px;font-weight:500;background:color-mix(in srgb,var(--card) 70%,transparent);backdrop-filter:blur(8px);transition:transform .25s,border-color .25s}
 .org:hover{transform:translateY(-3px);border-color:var(--accent)}
 .org .lg.sm{width:30px;height:30px;border-radius:50%}
-/* Aerometrix ships only a wide wordmark: auto-width tile, fixed-height mark */
-.org:has(.wm){padding-right:5px}
-.lg.wm,.org .lg.sm.wm{width:auto;padding:0 14px}
-.lg.wm img,.lg.wm img[src]{width:auto;height:14px}
-.lg.sm.wm{padding:0 10px}.lg.sm.wm img{height:10px}
-.org .lg.sm.wm{border-radius:999px}.org .lg.sm.wm img{height:11px}
 .co{flex-wrap:wrap}
 
 /* sections */
@@ -213,6 +207,61 @@ footer{border-top:1px solid var(--line);padding:28px 0;font-size:13px;color:var(
 footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 footer a:hover{color:var(--ink)}
 
+/* ---- polish layer ---- */
+/* film grain over everything, very faint */
+body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+/* hero name rises in, line by line */
+h1 .ln{display:block;overflow:hidden;padding:.08em .12em .04em 0;margin:-.08em 0 -.04em}
+h1 .ln>*{display:inline-block;animation:rise 1.1s cubic-bezier(.2,.7,.2,1) both}
+h1 .ln+.ln>*{animation-delay:.12s}
+@keyframes rise{from{transform:translateY(110%)}}
+/* moving sheen on accent words */
+h1 em,.contact h2 em{background:linear-gradient(100deg,var(--accent) 35%,color-mix(in srgb,var(--accent) 45%,#fff) 50%,var(--accent) 65%) 0 0/250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:sheen 7s linear infinite}
+h1 .ln>em{animation:rise 1.1s .12s cubic-bezier(.2,.7,.2,1) both,sheen 7s 1.2s linear infinite}
+@keyframes sheen{to{background-position:-250% 0}}
+.stats b{font-variant-numeric:tabular-nums}
+/* "Built at" marquee */
+.marq{flex:1;min-width:0;overflow:hidden;padding:4px 0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.track{display:flex;width:max-content;animation:marq 32s linear infinite}
+.track>*{margin-right:12px}
+.marq:hover .track{animation-play-state:paused}
+@keyframes marq{to{transform:translateX(-33.3333%)}}
+@media (max-width:620px){.orgs .mono{flex-basis:100%}}
+/* traced border on cards */
+@property --a{syntax:"<angle>";inherits:false;initial-value:0deg}
+.tile::after,.proj::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;opacity:0;transition:opacity .4s;
+  background:conic-gradient(from var(--a),transparent 0 62%,var(--accent) 80%,transparent 92%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.tile:hover::after,.proj:hover::after{opacity:1;animation:spin 3.5s linear infinite}
+@keyframes spin{to{--a:360deg}}
+.chip{transition:border-color .25s,color .25s}
+.tile:hover .chip,.job:hover .chip,.proj:hover .chip{border-color:var(--line-2);color:var(--ink)}
+/* projects: blueprint grid fading out of the top-right corner */
+.proj{background:linear-gradient(200deg,transparent 0%,var(--card) 45%),linear-gradient(var(--line) 1px,transparent 1px) 0 0/28px 28px,linear-gradient(90deg,var(--line) 1px,transparent 1px) 0 0/28px 28px,var(--card);transition:border-color .3s,transform .4s cubic-bezier(.2,.7,.2,1)}
+.proj:hover{transform:translateY(-4px)}
+.proj .top>.mono:last-child{padding:4px 10px;border:1px solid var(--line-2);border-radius:999px;transition:.3s}
+.proj:hover .top>.mono:last-child{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+/* experience timeline */
+.jobs{position:relative}
+.jobs::before{content:"";position:absolute;left:212px;top:26px;bottom:0;width:1px;background:linear-gradient(var(--accent),var(--line-2) 22%,var(--line) 85%,transparent)}
+.job{position:relative;border-top:0;padding:12px 0}
+.job::before{content:"";position:absolute;left:207px;top:60px;width:11px;height:11px;border-radius:50%;background:var(--bg);border:2px solid var(--line-2);transition:border-color .3s,background .3s;z-index:1}
+.job:first-child::before{top:20px;border-color:var(--accent);background:var(--accent);animation:ping 2.4s infinite}
+@keyframes ping{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 55%,transparent)}70%,100%{box-shadow:0 0 0 12px transparent}}
+.job:hover::before{border-color:var(--accent)}
+.job>div:last-child{padding:28px 28px 24px 40px;border-radius:var(--r);border:1px solid transparent;transition:background .35s,border-color .35s}
+.job:first-child>div:last-child{padding-top:0}
+.job:hover>div:last-child{background:var(--card);border-color:var(--line)}
+.job:first-child:hover>div:last-child{padding-top:28px;margin-top:-28px}
+.job .when{padding-top:46px}
+.job:first-child .when{padding-top:18px}
+@media (max-width:760px){.jobs::before{left:5px}.job::before{left:0;top:6px}.job:first-child::before{top:6px}.job{padding-left:28px}.job .when,.job:first-child .when{padding-top:0}.job>div:last-child,.job:first-child>div:last-child{padding:12px 0 0}.job:hover>div:last-child{background:none;border-color:transparent}.job:first-child:hover>div:last-child{padding-top:12px;margin-top:0}}
+/* contact glow */
+.contact{position:relative;overflow:hidden}
+.contact::before{content:"";position:absolute;left:50%;bottom:-40%;width:min(1100px,140%);aspect-ratio:2;transform:translateX(-50%);border-radius:50%;background:radial-gradient(closest-side,var(--accent-soft),transparent);pointer-events:none}
+.contact .wrap{position:relative}
+
 /* reveal (only when JS runs, so content never stays hidden) */
 .js .rv{opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
 .js .rv.in{opacity:1;transform:none}
@@ -248,7 +297,7 @@ footer a:hover{color:var(--ink)}
   </div>
   <div class="wrap">
     <span class="badge"><i></i>Computer Vision · Robotics · Autonomous Drones</span>
-    <h1>Abanob<br><em>Salib</em></h1>
+    <h1><span class="ln"><span>Abanob</span></span><span class="ln"><em>Salib</em></span></h1>
     <div class="hero-row">
       <div>
         <p class="lede">M.Eng engineer building <b>perception, visual odometry and embedded ML</b> for autonomous drones — systems that let machines see and navigate the world.</p>
@@ -263,7 +312,7 @@ footer a:hover{color:var(--ink)}
         <div><b>3</b><span>Industries</span></div>
       </div>
     </div>
-    <div class="orgs"><span class="mono">Built at</span><span class="org"><span class="lg sm" title="Draganfly Inc."><img src="logos/draganfly.png" alt="Draganfly Inc." width="128" height="128" loading="lazy"></span><span>Draganfly</span></span><span class="org"><span class="lg sm wm" title="Aerometrix Ltd."><img src="logos/aerometrix.png" alt="Aerometrix Ltd." width="600" height="71" loading="lazy"></span></span><span class="org"><span class="lg sm" title="ITRES Research Ltd."><img src="logos/itres.png" alt="ITRES Research Ltd." width="128" height="128" loading="lazy"></span><span>ITRES</span></span><span class="org"><span class="lg sm" title="TDK Corporation"><img src="logos/tdk.png" alt="TDK Corporation" width="128" height="128" loading="lazy"></span><span>TDK</span></span><span class="org"><span class="lg sm" title="University of Calgary"><img src="logos/ucalgary.png" alt="University of Calgary" width="128" height="128" loading="lazy"></span><span>UCalgary</span></span></div>
+    <div class="orgs"><span class="mono">Built at</span><div class="marq"><div class="track"><span class="org"><span class="lg sm" title="Draganfly Inc."><img src="logos/draganfly.png" alt="Draganfly Inc." width="128" height="128" loading="lazy"></span><span>Draganfly</span></span><span class="org"><span class="lg sm" title="Aerometrix Ltd."><img src="logos/aerometrix.png" alt="Aerometrix Ltd." width="128" height="128" loading="lazy"></span><span>Aerometrix</span></span><span class="org"><span class="lg sm" title="ITRES Research Ltd."><img src="logos/itres.png" alt="ITRES Research Ltd." width="128" height="128" loading="lazy"></span><span>ITRES</span></span><span class="org"><span class="lg sm" title="TDK Corporation"><img src="logos/tdk.png" alt="TDK Corporation" width="128" height="128" loading="lazy"></span><span>TDK</span></span><span class="org"><span class="lg sm" title="University of Calgary"><img src="logos/ucalgary.png" alt="University of Calgary" width="128" height="128" loading="lazy"></span><span>UCalgary</span></span></div></div></div>
   </div>
 </header>
 
@@ -314,15 +363,15 @@ footer a:hover{color:var(--ink)}
 <section id="experience">
   <div class="wrap">
     <div class="sec-head rv"><div class="mono">03 — Experience</div><h2>Where I've <em>built</em>.</h2></div>
-    <div>
+    <div class="jobs">
       <article class="job rv"><div class="when">Feb 2026 — Present<br><span class="now">CURRENT</span></div><div>
         <div class="co"><span class="lg" title="Draganfly Inc."><img src="logos/draganfly.png" alt="Draganfly Inc." width="128" height="128" loading="lazy"></span><div><h3>Draganfly Inc.</h3><div class="role">Software / Applications Engineer · Saskatoon, SK</div></div></div>
         <p>Leading migration of the drone perception compute stack from Raspberry Pi to NVIDIA Jetson Orin for real-time performance. Implementing visual odometry, obstacle avoidance and sensor fusion on ROS 2 and PX4. Completed a multi-week milestone in a single day, earning direct recognition from leadership.</p>
         <div class="chips"><span class="chip">NVIDIA Jetson</span><span class="chip">ROS 2</span><span class="chip">PX4</span><span class="chip">Visual Odometry</span><span class="chip">Obstacle Avoidance</span><span class="chip">MAVLink</span><span class="chip">C++</span></div></div></article>
       <article class="job rv"><div class="when">Jan 2026 — Oct 2026</div><div>
-        <div class="co"><span class="lg wm" title="Aerometrix Ltd."><img src="logos/aerometrix.png" alt="Aerometrix Ltd." width="600" height="71" loading="lazy"></span><div><h3>Aerometrix Ltd.</h3><div class="role">UAV Systems Engineer (part-time consulting) · Remote</div></div></div>
-        <p>Consulted on UAV-based methane detection services. Led a field deployment in San Diego — diagnosing and resolving critical drone hardware, data logging and software issues under live conditions. Earned a salary increase and equity offer following the deployment.</p>
-        <div class="chips"><span class="chip">UAV Systems</span><span class="chip">Methane Detection</span><span class="chip">Field Deployment</span><span class="chip">Python</span><span class="chip">Remote Sensing</span></div></div></article>
+        <div class="co"><span class="lg" title="Aerometrix Ltd."><img src="logos/aerometrix.png" alt="Aerometrix Ltd." width="128" height="128" loading="lazy"></span><div><h3>Aerometrix Ltd.</h3><div class="role">UAV Systems Engineer (part-time consulting) · Remote</div></div></div>
+        <p>Built the core software behind Aerometrix's UAV methane detection service: AeroPipeline, an end-to-end platform that processes survey data and delivers results through client portals running in production; onboard flight-computer software validated end-to-end in the field; and an Android field-observer app. Led a field deployment in San Diego, diagnosing and resolving critical drone hardware, data logging and software issues under live conditions.</p>
+        <div class="chips"><span class="chip">UAV Systems</span><span class="chip">Methane Detection</span><span class="chip">Field Deployment</span><span class="chip">Data Pipelines</span><span class="chip">Python</span><span class="chip">Android</span><span class="chip">Remote Sensing</span></div></div></article>
       <article class="job rv"><div class="when">2022 — Feb 2026</div><div>
         <div class="co"><span class="lg" title="ITRES Research Ltd."><img src="logos/itres.png" alt="ITRES Research Ltd." width="128" height="128" loading="lazy"></span><div><h3>ITRES Research Ltd.</h3><div class="role">Software Engineer, Airborne Imaging Systems · Calgary, AB</div></div></div>
         <p>Developed software for the TABI-1800 thermal airborne detection system used in Canadian defense operations. Built signal processing and calibration pipelines for hyperspectral imaging; contributed to sensor firmware and data acquisition architecture.</p>
@@ -381,7 +430,7 @@ footer a:hover{color:var(--ink)}
         <h3>TABI-1800 Airborne Detection</h3>
         <p>Software for Canada's defense-grade thermal airborne detection system. C++ signal processing and calibration pipelines for hyperspectral data captured at altitude for Canadian DND operations.</p>
         <div class="chips"><span class="chip">C++</span><span class="chip">Python</span><span class="chip">Thermal</span><span class="chip">Defense</span><span class="chip">Signal Processing</span></div></article>
-      <article class="proj rv"><div class="top"><span class="pco"><span class="lg sm wm" title="Aerometrix Ltd."><img src="logos/aerometrix.png" alt="Aerometrix Ltd." width="600" height="71" loading="lazy"></span><span class="mono">Field · 2026</span></span><span class="mono">P/03</span></div>
+      <article class="proj rv"><div class="top"><span class="pco"><span class="lg sm" title="Aerometrix Ltd."><img src="logos/aerometrix.png" alt="Aerometrix Ltd." width="128" height="128" loading="lazy"></span><span class="mono">Field · 2026</span></span><span class="mono">P/03</span></div>
         <h3>UAV Methane Detection</h3>
         <p>End-to-end UAV platform for pipeline methane leak detection. Field-deployed in San Diego, resolving critical hardware and software faults live. Multi-spectral sensors with ML classification.</p>
         <div class="chips"><span class="chip">UAV</span><span class="chip">Gas Sensors</span><span class="chip">Python</span><span class="chip">ML</span><span class="chip">Field Ops</span></div></article>
@@ -423,6 +472,18 @@ const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 // Reveal on scroll
 const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 });
 document.querySelectorAll('.rv').forEach(el => io.observe(el));
+
+// "Built at" marquee: two hidden copies so the loop never shows a gap (static when motion is reduced)
+const track = document.querySelector('.orgs .track');
+if (!reduce) for (let i = 0; i < 2; i++) [...track.children].slice(0, 5).forEach(n => { const c = n.cloneNode(true); c.setAttribute('aria-hidden', 'true'); track.append(c); });
+
+// Hero stats count up once
+if (!reduce) document.querySelectorAll('.stats b').forEach(b => {
+  const txt = b.textContent, n = parseInt(txt), suf = txt.replace(/\d+/, ''); let t0;
+  b.textContent = '0' + suf;
+  const f = t => { t0 ??= t; const k = Math.min(1, (t - t0) / 1400); b.textContent = Math.round(n * (1 - (1 - k) ** 3)) + suf; if (k < 1) requestAnimationFrame(f); };
+  setTimeout(() => requestAnimationFrame(f), 500);
+});
 
 // Email card copies the address instead of opening a mail client
 const email = document.getElementById('email');
